@@ -1,15 +1,24 @@
 import {
   ArrowUpRight,
+  Instagram,
   Image,
+  MessageCircle,
   Megaphone,
   Menu,
   Monitor,
   PanelsTopLeft,
+  Send,
   Smartphone,
   X,
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+} from "react";
 
 const navigationItems = [
   { label: "Início", href: "#inicio" },
@@ -107,8 +116,34 @@ const whyNexoraBlocks = [
   },
 ] as const;
 
-const whatsappContactUrl =
-  "https://wa.me/?text=Ol%C3%A1%2C%20NEXORA!%20Quero%20conversar%20sobre%20a%20minha%20empresa.";
+const nexoraWhatsappNumber = "";
+
+const nexoraCompanyDetails = {
+  cnpj: "",
+  address: "",
+  email: "",
+  socialLinks: [] as Array<{ label: string; href: string }>,
+};
+
+const serviceOptions = [
+  "Site",
+  "Landing Page",
+  "Cardápio Digital",
+  "Imagens",
+  "Materiais de Divulgação",
+  "Outro",
+] as const;
+
+const whatsappContactUrl = buildWhatsappUrl(
+  "Olá, NEXORA! Quero conversar sobre a minha empresa.",
+);
+
+function buildWhatsappUrl(message: string) {
+  const phoneNumber = nexoraWhatsappNumber.replace(/\D/g, "");
+  const recipientPath = phoneNumber ? `/${phoneNumber}` : "";
+
+  return `https://wa.me${recipientPath}?text=${encodeURIComponent(message)}`;
+}
 
 function NexoraLogo() {
   return (
@@ -482,7 +517,7 @@ function ProcessSection() {
           ))}
         </div>
 
-        <div className="needs-highlight" id="contato">
+        <div className="needs-highlight">
           <div className="needs-highlight__copy">
             <p className="section-eyebrow">
               <span aria-hidden="true" />
@@ -509,6 +544,284 @@ function ProcessSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ContactSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      section.classList.add("contact-section--visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("contact-section--visible");
+        observer.disconnect();
+      },
+      { threshold: 0.12 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const message = [
+      "Olá, NEXORA! Gostaria de conversar sobre uma solução para a minha empresa.",
+      "",
+      `Nome: ${formData.get("name")}`,
+      `Empresa: ${formData.get("company")}`,
+      `WhatsApp: ${formData.get("whatsapp")}`,
+      `Serviço de interesse: ${formData.get("service")}`,
+      `Mensagem: ${formData.get("message")}`,
+    ].join("\n");
+
+    window.open(buildWhatsappUrl(message), "_blank", "noopener,noreferrer");
+    event.currentTarget.reset();
+  };
+
+  return (
+    <section
+      className="contact-section"
+      id="contato"
+      ref={sectionRef}
+      aria-labelledby="contact-title"
+    >
+      <div className="contact-section__inner">
+        <div className="contact-section__copy contact-reveal">
+          <p className="section-eyebrow">
+            <span aria-hidden="true" />
+            CONTATO
+          </p>
+          <h2 id="contact-title">
+            Vamos transformar sua próxima ideia em <em>realidade?</em>
+          </h2>
+          <p className="contact-section__intro">
+            Conte o que sua empresa precisa. Vamos entender seu objetivo e
+            conversar sobre a melhor solução.
+          </p>
+          <a
+            className="button button--primary contact-section__whatsapp"
+            href={whatsappContactUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Falar com a NEXORA pelo WhatsApp"
+          >
+            Falar com a NEXORA
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </a>
+          <div className="contact-section__signal" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+
+        <form
+          className="contact-form contact-reveal"
+          style={{ "--contact-delay": "120ms" } as CSSProperties}
+          onSubmit={handleFormSubmit}
+        >
+          <div className="contact-form__heading">
+            <div>
+              <p>ENVIE UMA MENSAGEM</p>
+              <h3>Conte sobre o seu projeto.</h3>
+            </div>
+            <span aria-hidden="true">
+              <Send size={20} strokeWidth={1.7} />
+            </span>
+          </div>
+
+          <div className="contact-form__grid">
+            <label>
+              <span>Nome</span>
+              <input
+                type="text"
+                name="name"
+                autoComplete="name"
+                placeholder="Seu nome"
+                required
+              />
+            </label>
+            <label>
+              <span>Empresa</span>
+              <input
+                type="text"
+                name="company"
+                autoComplete="organization"
+                placeholder="Nome da empresa"
+                required
+              />
+            </label>
+            <label>
+              <span>WhatsApp</span>
+              <input
+                type="tel"
+                name="whatsapp"
+                autoComplete="tel"
+                placeholder="Seu número"
+                required
+              />
+            </label>
+            <label>
+              <span>Serviço de interesse</span>
+              <select name="service" defaultValue="" required>
+                <option value="" disabled>
+                  Selecione um serviço
+                </option>
+                {serviceOptions.map((service) => (
+                  <option value={service} key={service}>
+                    {service}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="contact-form__message">
+              <span>Mensagem</span>
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Conte um pouco sobre o que sua empresa precisa"
+                required
+              />
+            </label>
+          </div>
+
+          <button className="button button--primary contact-form__submit" type="submit">
+            Enviar mensagem
+            <Send size={17} aria-hidden="true" />
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  const footerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+
+    if (!("IntersectionObserver" in window)) {
+      footer.classList.add("site-footer--visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        footer.classList.add("site-footer--visible");
+        observer.disconnect();
+      },
+      { threshold: 0.08 },
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
+  const companyDetails = [
+    nexoraCompanyDetails.cnpj && {
+      label: "CNPJ",
+      value: nexoraCompanyDetails.cnpj,
+    },
+    nexoraCompanyDetails.address && {
+      label: "Endereço",
+      value: nexoraCompanyDetails.address,
+    },
+    nexoraCompanyDetails.email && {
+      label: "E-mail",
+      value: nexoraCompanyDetails.email,
+      href: `mailto:${nexoraCompanyDetails.email}`,
+    },
+  ].filter(Boolean) as Array<{ label: string; value: string; href?: string }>;
+
+  return (
+    <footer className="site-footer" ref={footerRef}>
+      <div className="site-footer__inner">
+        <div
+          className={`site-footer__main footer-reveal${
+            companyDetails.length > 0 ? " site-footer__main--with-details" : ""
+          }`}
+        >
+          <div className="site-footer__brand">
+            <a href="#inicio" aria-label="Voltar ao início">
+              <NexoraLogo />
+            </a>
+            <p>Inteligência que faz empresas crescerem.</p>
+          </div>
+
+          <nav className="site-footer__nav" aria-label="Links do rodapé">
+            <p>NAVEGAÇÃO</p>
+            <a href="#inicio">Início</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#como-funciona">Como funciona</a>
+            <a href="#por-que-nexora">Sobre nós</a>
+            <a href="#contato">Contato</a>
+          </nav>
+
+          <div className="site-footer__social">
+            <p>CONECTE-SE</p>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+              <Instagram size={17} aria-hidden="true" />
+              Instagram
+            </a>
+            <a
+              href={whatsappContactUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Falar com a NEXORA pelo WhatsApp"
+            >
+              <MessageCircle size={17} aria-hidden="true" />
+              WhatsApp
+            </a>
+            {nexoraCompanyDetails.socialLinks.map((socialLink) => (
+              <a
+                href={socialLink.href}
+                target="_blank"
+                rel="noreferrer"
+                key={`${socialLink.label}-${socialLink.href}`}
+              >
+                {socialLink.label}
+              </a>
+            ))}
+          </div>
+
+          {companyDetails.length > 0 && (
+            <div className="site-footer__company-details">
+              <p>INFORMAÇÕES</p>
+              {companyDetails.map((detail) => (
+                <div key={detail.label}>
+                  <span>{detail.label}</span>
+                  {detail.href ? (
+                    <a href={detail.href}>{detail.value}</a>
+                  ) : (
+                    <span>{detail.value}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="site-footer__bottom footer-reveal">
+          <p>© {new Date().getFullYear()} NEXORA. Todos os direitos reservados.</p>
+          <span>INTELIGÊNCIA / CRIATIVIDADE / RESULTADO</span>
+        </div>
+      </div>
+    </footer>
   );
 }
 
@@ -570,6 +883,8 @@ function Index() {
       <ServicesSection />
       <WhyNexoraSection />
       <ProcessSection />
+      <ContactSection />
+      <SiteFooter />
     </main>
   );
 }
