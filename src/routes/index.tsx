@@ -1,52 +1,45 @@
 import {
-  ArrowDown,
+  ArrowRight,
   ArrowUpRight,
   CheckCircle2,
   ChevronRight,
   Instagram,
-  Laptop,
   Layers,
-  MessageCircle,
   Menu,
+  MessageCircle,
   Palette,
-  Phone,
   Send,
-  Share2,
   Sparkles,
   X,
+  XCircle,
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Hero3DArtwork } from "../components/canvas/Hero3DArtwork";
-import { SectionTransition } from "../components/canvas/SectionTransition";
-import { useParallax, useTiltCard } from "../hooks/useVisualExperience";
+import { useEffect, useRef, useState } from "react";
+import { HeroNMonolith } from "../components/canvas/HeroNMonolith";
 
+/**
+ * CONFIGURAÇÃO CENTRAL DE IMAGENS DOS SERVIÇOS
+ * Aceita: PNG, JPG, WEBP.
+ * Quando fornecidas URLs válidas, substituem automaticamente as composições de mockup ricas.
+ */
+export const serviceMediaAssets = {
+  siteImage: "" as string,
+  landingPageImage: "" as string,
+  menuImage: "" as string,
+  visualContentImage: "" as string,
+  marketingMaterialImage: "" as string,
+};
 
 const navigationItems = [
   { label: "Início", href: "#inicio" },
   { label: "Serviços", href: "#servicos" },
-  { label: "Posicionamento", href: "#por-que-nexora" },
-  { label: "Método", href: "#como-funciona" },
+  { label: "Por que a NEXORA?", href: "#por-que-nexora" },
+  { label: "Como funciona", href: "#como-funciona" },
+  { label: "Sobre nós", href: "#sobre-nos" },
   { label: "Contato", href: "#contato" },
 ] as const;
 
 const nexoraWhatsappNumber = "";
-
-const nexoraCompanyDetails = {
-  cnpj: "",
-  address: "",
-  email: "",
-  socialLinks: [] as Array<{ label: string; href: string }>,
-};
-
-const serviceOptions = [
-  "Criação de Site",
-  "Landing Page de Alta Conversão",
-  "Cardápio Digital",
-  "Imagens e Conteúdo Visual",
-  "Materiais de Divulgação",
-  "Projeto Customizado",
-] as const;
 
 function buildWhatsappUrl(message: string) {
   const phoneNumber = nexoraWhatsappNumber.replace(/\D/g, "");
@@ -54,37 +47,9 @@ function buildWhatsappUrl(message: string) {
   return `https://wa.me${recipientPath}?text=${encodeURIComponent(message)}`;
 }
 
-const whatsappContactUrl = buildWhatsappUrl(
+const defaultWhatsappUrl = buildWhatsappUrl(
   "Olá, NEXORA! Quero conversar sobre soluções digitais para a minha empresa.",
 );
-
-function useSectionReveal<T extends HTMLElement>() {
-  const sectionRef = useRef<T | null>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (!("IntersectionObserver" in window)) {
-      section.classList.add("is-visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        section.classList.add("is-visible");
-        observer.disconnect();
-      },
-      { threshold: 0.15 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  return sectionRef;
-}
 
 function NexoraLogo() {
   return (
@@ -114,7 +79,7 @@ function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 24);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -129,9 +94,7 @@ function SiteHeader() {
 
   return (
     <header
-      className={`nx-header${isScrolled ? " nx-header--scrolled" : ""}${
-        isMenuOpen ? " nx-header--open" : ""
-      }`}
+      className={`nx-header${isScrolled ? " nx-header--scrolled" : ""}`}
     >
       <div className="nx-header__container">
         <a
@@ -152,9 +115,14 @@ function SiteHeader() {
         </nav>
 
         <div className="nx-header__right">
-          <a className="nx-btn nx-btn--pill-accent" href="#contato">
+          <a
+            className="nx-btn nx-btn--pill-accent"
+            href={defaultWhatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
             <span>Falar com a NEXORA</span>
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <ArrowUpRight size={15} aria-hidden="true" />
           </a>
 
           <button
@@ -175,26 +143,28 @@ function SiteHeader() {
       >
         <div className="nx-drawer__content">
           <nav className="nx-drawer__nav" aria-label="Navegação mobile">
-            {navigationItems.map((item, index) => (
+            {navigationItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 className="nx-drawer__link"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <span className="nx-drawer__link-num">0{index + 1}</span>
-                <span className="nx-drawer__link-title">{item.label}</span>
+                <span>{item.label}</span>
                 <ChevronRight size={18} aria-hidden="true" />
               </a>
             ))}
           </nav>
           <div className="nx-drawer__footer">
             <a
-              className="nx-btn nx-btn--primary nx-btn--full"
-              href="#contato"
+              className="nx-btn nx-btn--hero-primary"
+              style={{ width: "100%" }}
+              href={defaultWhatsappUrl}
+              target="_blank"
+              rel="noreferrer"
               onClick={() => setIsMenuOpen(false)}
             >
-              Falar com a NEXORA
+              <span>Falar com a NEXORA</span>
               <ArrowUpRight size={18} aria-hidden="true" />
             </a>
           </div>
@@ -207,76 +177,62 @@ function SiteHeader() {
 function Hero() {
   return (
     <section className="hero-section" id="inicio" aria-labelledby="hero-title">
-      <div className="hero-section__shell">
+      <div className="nx-container">
         <div className="hero-section__grid">
           <div className="hero-copy">
-            <div className="hero-copy__eyebrow">
-              <span className="hero-copy__eyebrow-pip" aria-hidden="true" />
-              INTELIGÊNCIA QUE FAZ EMPRESAS CRESCEREM
+            <div className="hero-copy__badge">
+              <span className="hero-copy__badge-dot" />
+              Soluções Digitais para Empresas
             </div>
 
             <h1 id="hero-title" className="hero-copy__title">
               Inteligência que faz
               <span className="hero-copy__title-highlight">
-                empresas <em className="text-shimmer">crescerem.</em>
+                empresas <em>crescerem.</em>
               </span>
             </h1>
 
             <p className="hero-copy__lead">
-              Criamos soluções digitais para empresas que querem melhorar sua
-              presença, sua comunicação e sua forma de vender.
+              Criamos soluções digitais para empresas que querem melhorar sua presença,
+              sua comunicação e sua forma de vender.
             </p>
 
             <div className="hero-copy__actions">
-              <a className="nx-btn nx-btn--hero-primary" href="#contato">
+              <a
+                className="nx-btn nx-btn--hero-primary"
+                href={defaultWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span>Falar com a NEXORA</span>
                 <ArrowUpRight size={18} aria-hidden="true" />
               </a>
               <a className="nx-btn nx-btn--hero-secondary" href="#servicos">
-                <span>Conhecer serviços</span>
+                <span>Conhecer nossos serviços</span>
               </a>
-            </div>
-
-            <div className="hero-copy__metrics">
-              <div className="hero-metric">
-                <span className="hero-metric__num">100%</span>
-                <span className="hero-metric__label">Projetos sob medida</span>
-              </div>
-              <div className="hero-metric__divider" aria-hidden="true" />
-              <div className="hero-metric">
-                <span className="hero-metric__num">Design + IA</span>
-                <span className="hero-metric__label">Engenharia contemporânea</span>
-              </div>
-              <div className="hero-metric__divider" aria-hidden="true" />
-              <div className="hero-metric">
-                <span className="hero-metric__num">Foco Total</span>
-                <span className="hero-metric__label">Resultados comerciais</span>
-              </div>
             </div>
           </div>
 
           <div className="hero-visual-column">
-            <Hero3DArtwork />
-          </div>
-        </div>
+            <div className="hero-artwork" aria-hidden="true">
+              <div className="hero-artwork__ambient" />
+              <div className="hero-artwork__canvas-frame">
+                <div className="hero-artwork__monolith-wrapper">
+                  <HeroNMonolith />
+                </div>
+              </div>
 
-        <div className="hero-section__bar">
-          <span className="hero-section__bar-label">SOLUÇÕES PRINCIPAIS</span>
-          <div className="hero-section__tags">
-            <span>SITES INSTITUCIONAIS</span>
-            <span className="hero-section__dot" />
-            <span>LANDING PAGES</span>
-            <span className="hero-section__dot" />
-            <span>CARDÁPIOS DIGITAIS</span>
-            <span className="hero-section__dot" />
-            <span>IMAGENS E CONTEÚDO VISUAL</span>
-            <span className="hero-section__dot" />
-            <span>MATERIAIS DE DIVULGAÇÃO</span>
+              <div className="hero-artwork__floating-card">
+                <div className="hero-artwork__floating-card-icon">
+                  <Sparkles size={18} />
+                </div>
+                <div>
+                  <span className="hero-artwork__floating-card-label">Design &amp; Tecnologia</span>
+                  <span className="hero-artwork__floating-card-sub">Experiência digital premium</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <a className="hero-section__scroll" href="#servicos" aria-label="Rolar para os serviços">
-            <span>EXPLORAR</span>
-            <ArrowDown size={14} />
-          </a>
         </div>
       </div>
     </section>
@@ -284,250 +240,311 @@ function Hero() {
 }
 
 function ServicesSection() {
-  const sectionRef = useSectionReveal<HTMLElement>();
-  const flagshipTiltRef = useTiltCard<HTMLDivElement>(4);
-  const campaignTiltRef = useTiltCard<HTMLDivElement>(5);
-  const phoneTiltRef = useTiltCard<HTMLDivElement>(6);
-  const galleryTiltRef = useTiltCard<HTMLDivElement>(5);
-  const feedTiltRef = useTiltCard<HTMLDivElement>(5);
-  const flagshipParallaxRef = useParallax<HTMLDivElement>(0.06);
-
   return (
-    <section
-      className="editorial-services reveal-block"
-      id="servicos"
-      ref={sectionRef}
-      aria-labelledby="services-headline"
-    >
-      <div className="editorial-services__shell">
-        <header className="editorial-header">
-          <div className="editorial-header__tag">
-            <span className="editorial-header__line" />
-            PORTFÓLIO &amp; SOLUÇÕES
-          </div>
-          <div className="editorial-header__split">
-            <h2 id="services-headline" className="editorial-header__title reveal-elem" style={{ animationDelay: "180ms" }}>
-              Construímos a presença <span className="text-shimmer">digital</span> da sua empresa.
-            </h2>
-            <p className="editorial-header__desc">
-              Cada ponto de contato digital deve comunicar solidez, autoridade e sofisticação.
-              Apresentamos soluções desenhadas em formatos editoriais dedicados para cada necessidade comercial.
-            </p>
-          </div>
+    <section className="solutions-section" id="servicos" aria-labelledby="solutions-title">
+      <div className="nx-container">
+        <header className="section-header">
+          <span className="section-header__tag">Soluções Principais</span>
+          <h2 id="solutions-title" className="section-header__title">
+            Soluções que transformam sua presença digital.
+          </h2>
+          <p className="section-header__desc">
+            Da primeira impressão à comunicação diária com seus clientes, criamos
+            experiências digitais pensadas para apresentar melhor sua empresa.
+          </p>
         </header>
 
-        <div className="editorial-showcase">
-          {/* Serviço 1: Criação de Sites - Grande Bloco Principal */}
-          <article className="editorial-block editorial-block--flagship">
-            <div className="editorial-block__meta">
-              <span className="editorial-block__category">ESTÚDIO WEB / 01</span>
-              <h3 className="editorial-block__heading">Criação de Sites</h3>
-              <p className="editorial-block__text">
-                Sites modernos, rápidos e responsivos para apresentar sua empresa e transformar visitantes em clientes com credibilidade de grande player.
+        <div className="solutions-list">
+          {/* SERVIÇO 01: CRIAÇÃO DE SITES */}
+          <article className="solution-feature">
+            <div className="solution-feature__meta">
+              <span className="solution-feature__number">SERVIÇO 01</span>
+              <h3 className="solution-feature__title">CRIAÇÃO DE SITES</h3>
+              <p className="solution-feature__text">
+                Sites profissionais para apresentar sua empresa, seus serviços e sua marca.
               </p>
-              <ul className="editorial-block__points">
-                <li><CheckCircle2 size={16} /> Arquitetura de informação intuitiva</li>
-                <li><CheckCircle2 size={16} /> Performance ultra veloz e SEO estratégico</li>
-                <li><CheckCircle2 size={16} /> Identidade exclusiva sem templates genéricos</li>
-              </ul>
-              <a className="editorial-block__cta" href="#contato">
-                <span>Solicitar orçamento de site</span>
-                <ArrowUpRight size={17} />
+              <a
+                className="solution-feature__cta"
+                href={buildWhatsappUrl("Olá! Gostaria de conversar sobre a criação de um site profissional para a minha empresa.")}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Solicitar proposta para site</span>
+                <ArrowUpRight size={15} />
               </a>
             </div>
 
-            <div className="editorial-block__visual editorial-block__visual--desktop" ref={flagshipParallaxRef}>
-              <div className="mockup-browser nx-tilt-element" ref={flagshipTiltRef}>
-                <div className="mockup-browser__bar">
-                  <div className="mockup-browser__dots">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                  <div className="mockup-browser__address">empresa.com.br — Flagship Experience</div>
-                </div>
-                <div className="mockup-browser__content">
-                  <div className="mockup-browser__hero-preview">
-                    <span className="mockup-browser__tag">Nova Coleção / Institucional</span>
-                    <h4>Apresentação corporativa de alto padrão</h4>
-                    <div className="mockup-browser__row">
-                      <div className="mockup-browser__card">
-                        <div className="mockup-browser__photo mockup-browser__photo--1" />
-                        <span>Soluções Corporativas</span>
+            <div className="solution-feature__visual">
+              <div className="solution-canvas">
+                {serviceMediaAssets.siteImage ? (
+                  <img
+                    src={serviceMediaAssets.siteImage}
+                    alt="Criação de Sites Profissionais NEXORA"
+                    className="solution-canvas__img"
+                  />
+                ) : (
+                  <div className="mockup-desktop">
+                    <div className="mockup-desktop__topbar">
+                      <div className="mockup-desktop__dots">
+                        <span />
+                        <span />
+                        <span />
                       </div>
-                      <div className="mockup-browser__card">
-                        <div className="mockup-browser__photo mockup-browser__photo--2" />
-                        <span>Consultoria &amp; Escala</span>
+                      <span className="mockup-desktop__url">empresa.com.br</span>
+                    </div>
+                    <div className="mockup-desktop__screen">
+                      <div className="mockup-desktop__hero">
+                        <span className="mockup-desktop__badge">Empresa em Destaque</span>
+                        <div className="mockup-desktop__title">Solidez e Autoridade Digital</div>
+                        <div className="mockup-desktop__card-line" />
+                      </div>
+                      <div className="mockup-desktop__grid">
+                        <div className="mockup-desktop__card">
+                          <div className="mockup-desktop__card-thumb" />
+                          <div className="mockup-desktop__card-line" />
+                        </div>
+                        <div className="mockup-desktop__card">
+                          <div className="mockup-desktop__card-thumb" />
+                          <div className="mockup-desktop__card-line" />
+                        </div>
+                        <div className="mockup-desktop__card">
+                          <div className="mockup-desktop__card-thumb" />
+                          <div className="mockup-desktop__card-line" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </article>
 
-          {/* Grid Assimétrico: Landing Page e Cardápio Digital */}
-          <div className="editorial-split-duo">
-            {/* Serviço 2: Landing Pages */}
-            <article className="editorial-block editorial-block--landing">
-              <div className="editorial-block__meta">
-                <span className="editorial-block__category">CONVERSÃO / 02</span>
-                <h3 className="editorial-block__heading">Landing Pages</h3>
-                <p className="editorial-block__text">
-                  Páginas focadas em uma oferta, produto ou campanha específica, pensadas minuciosamente para maximizar cadastros e gerar vendas qualificadas.
-                </p>
-                <div className="editorial-badge-row">
-                  <span className="editorial-pill">Campanhas Ads</span>
-                  <span className="editorial-pill">Lançamentos</span>
-                  <span className="editorial-pill">Captação B2B</span>
-                </div>
-              </div>
-
-              <div className="editorial-block__visual editorial-block__visual--campaign">
-                <div className="mockup-campaign nx-tilt-element" ref={campaignTiltRef}>
-                  <div className="mockup-campaign__header">
-                    <span className="mockup-campaign__tag">Oferta Especial</span>
-                    <span className="mockup-campaign__live">TEMPO LIMITADO</span>
-                  </div>
-                  <p className="mockup-campaign__headline">Acelere as vendas da sua empresa com precisão.</p>
-                  <div className="mockup-campaign__form-preview">
-                    <div className="mockup-campaign__input-dummy">seuemail@empresa.com</div>
-                    <div className="mockup-campaign__btn-dummy">Garantir Demonstração</div>
-                  </div>
-                  <div className="mockup-campaign__stats">
-                    <div>
-                      <strong>3.8x</strong>
-                      <small>Mais Leads</small>
-                    </div>
-                    <div>
-                      <strong>&lt; 1.2s</strong>
-                      <small>Carregamento</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <a className="editorial-link" href="#contato">
-                <span>Construir Landing Page</span>
-                <ArrowUpRight size={16} />
+          {/* SERVIÇO 02: LANDING PAGES */}
+          <article className="solution-feature solution-feature--reversed">
+            <div className="solution-feature__meta">
+              <span className="solution-feature__number">SERVIÇO 02</span>
+              <h3 className="solution-feature__title">LANDING PAGES</h3>
+              <p className="solution-feature__text">
+                Páginas focadas em campanhas, ofertas e geração de contatos.
+              </p>
+              <a
+                className="solution-feature__cta"
+                href={buildWhatsappUrl("Olá! Quero criar uma landing page com foco em campanhas e captação de clientes.")}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Criar Landing Page</span>
+                <ArrowUpRight size={15} />
               </a>
-            </article>
+            </div>
 
-            {/* Serviço 3: Cardápio Digital */}
-            <article className="editorial-block editorial-block--menu">
-              <div className="editorial-block__meta">
-                <span className="editorial-block__category">EXPERIÊNCIA MOBILE / 03</span>
-                <h3 className="editorial-block__heading">Cardápios Digitais</h3>
-                <p className="editorial-block__text">
-                  Interfaces pensadas para restaurantes e estabelecimentos que precisam de pedidos rápidos, fotos de dar água na boca e facilidade na palma da mão.
-                </p>
-              </div>
-
-              <div className="editorial-block__visual editorial-block__visual--phone">
-                <div className="mockup-phone nx-tilt-element" ref={phoneTiltRef}>
-                  <div className="mockup-phone__screen">
-                    <div className="mockup-phone__speaker" />
-                    <div className="mockup-phone__app-bar">
-                      <strong>Bistrô &amp; Cucina</strong>
-                      <span className="mockup-phone__badge">Mesa 08</span>
-                    </div>
-                    <div className="mockup-phone__item">
-                      <div className="mockup-phone__thumb mockup-phone__thumb--dish1" />
-                      <div className="mockup-phone__details">
-                        <span className="mockup-phone__name">Prato Principal Especial</span>
-                        <span className="mockup-phone__price">R$ 68,00</span>
+            <div className="solution-feature__visual">
+              <div className="solution-canvas">
+                {serviceMediaAssets.landingPageImage ? (
+                  <img
+                    src={serviceMediaAssets.landingPageImage}
+                    alt="Landing Pages de Alta Conversão NEXORA"
+                    className="solution-canvas__img"
+                  />
+                ) : (
+                  <div className="mockup-landing">
+                    <div className="mockup-landing__layer-base">
+                      <div className="mockup-landing__header">
+                        <span className="mockup-landing__pill">Campanha Especial</span>
+                        <span className="mockup-landing__conv">Alta Conversão</span>
                       </div>
-                      <div className="mockup-phone__add">+</div>
-                    </div>
-                    <div className="mockup-phone__item">
-                      <div className="mockup-phone__thumb mockup-phone__thumb--dish2" />
-                      <div className="mockup-phone__details">
-                        <span className="mockup-phone__name">Bebida Artesanal Gelada</span>
-                        <span className="mockup-phone__price">R$ 22,00</span>
+                      <div className="mockup-landing__offer">
+                        Apresente sua oferta com clareza e transforme visitas em oportunidades reais.
                       </div>
-                      <div className="mockup-phone__add">+</div>
-                    </div>
-                    <div className="mockup-phone__cart-bar">
-                      <span>Ver Sacola (2 itens)</span>
-                      <span>R$ 90,00</span>
+                      <div className="mockup-landing__form">
+                        <div className="mockup-landing__input">contato@suaempresa.com.br</div>
+                        <div className="mockup-landing__btn">Quero começar</div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
+            </div>
+          </article>
 
-              <a className="editorial-link" href="#contato">
-                <span>Criar Cardápio Digital</span>
-                <ArrowUpRight size={16} />
+          {/* SERVIÇO 03: CARDÁPIOS DIGITAIS */}
+          <article className="solution-feature">
+            <div className="solution-feature__meta">
+              <span className="solution-feature__number">SERVIÇO 03</span>
+              <h3 className="solution-feature__title">CARDÁPIOS DIGITAIS</h3>
+              <p className="solution-feature__text">
+                Experiências digitais rápidas, organizadas e fáceis de usar no celular.
+              </p>
+              <a
+                className="solution-feature__cta"
+                href={buildWhatsappUrl("Olá! Gostaria de desenvolver um cardápio digital moderno e ágil para celular.")}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Solicitar Cardápio Digital</span>
+                <ArrowUpRight size={15} />
               </a>
-            </article>
-          </div>
+            </div>
 
-          {/* Grid Duplo Inferior: Imagens e Conteúdo Visual + Materiais de Divulgação */}
-          <div className="editorial-split-duo editorial-split-duo--bottom">
-            {/* Serviço 4: Imagens e Conteúdo Visual */}
-            <article className="editorial-block editorial-block--visuals">
-              <div className="editorial-block__meta">
-                <span className="editorial-block__category">DIREÇÃO DE ARTE / 04</span>
-                <h3 className="editorial-block__heading">Imagens e Conteúdo Visual</h3>
-                <p className="editorial-block__text">
-                  Artes e composições visuais de alta definição para valorizar produtos, campanhas, catálogo institucional e elevar a percepção de valor da sua marca.
-                </p>
+            <div className="solution-feature__visual">
+              <div className="solution-canvas" style={{ background: "transparent", border: "none", boxShadow: "none" }}>
+                {serviceMediaAssets.menuImage ? (
+                  <img
+                    src={serviceMediaAssets.menuImage}
+                    alt="Cardápio Digital NEXORA"
+                    className="solution-canvas__img"
+                  />
+                ) : (
+                  <div className="mockup-menu-phone">
+                    <div className="mockup-menu-phone__header">
+                      <span className="mockup-menu-phone__brand">Bistrô &amp; Café</span>
+                      <span className="mockup-menu-phone__status">Aberto agora</span>
+                    </div>
+                    <div className="mockup-menu-phone__categories">
+                      <span className="mockup-menu-phone__cat mockup-menu-phone__cat--active">Destaques</span>
+                      <span className="mockup-menu-phone__cat">Principais</span>
+                      <span className="mockup-menu-phone__cat">Bebidas</span>
+                    </div>
+                    <div className="mockup-menu-phone__list">
+                      <div className="mockup-menu-phone__item">
+                        <div
+                          className="mockup-menu-phone__thumb"
+                          style={{
+                            background: "linear-gradient(135deg, #1c2738 0%, #2e415e 100%)",
+                          }}
+                        />
+                        <div className="mockup-menu-phone__info">
+                          <span className="mockup-menu-phone__item-title">Prato do Chef</span>
+                          <span className="mockup-menu-phone__item-price">R$ 54,00</span>
+                        </div>
+                      </div>
+                      <div className="mockup-menu-phone__item">
+                        <div
+                          className="mockup-menu-phone__thumb"
+                          style={{
+                            background: "linear-gradient(135deg, #182333 0%, #253954 100%)",
+                          }}
+                        />
+                        <div className="mockup-menu-phone__info">
+                          <span className="mockup-menu-phone__item-title">Bebida Artesanal</span>
+                          <span className="mockup-menu-phone__item-price">R$ 18,00</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mockup-menu-phone__cart-btn">
+                      <span>Fazer Pedido</span>
+                      <ArrowRight size={14} />
+                    </div>
+                  </div>
+                )}
               </div>
+            </div>
+          </article>
 
-              <div className="editorial-block__visual editorial-block__visual--gallery">
-                <div className="mockup-gallery nx-tilt-element" ref={galleryTiltRef}>
-                  <div className="mockup-gallery__tile mockup-gallery__tile--main">
-                    <span className="mockup-gallery__tag">Composição 3D / Premium</span>
-                  </div>
-                  <div className="mockup-gallery__tile mockup-gallery__tile--side1">
-                    <Palette size={20} />
-                  </div>
-                  <div className="mockup-gallery__tile mockup-gallery__tile--side2">
-                    <Layers size={20} />
-                  </div>
-                </div>
-              </div>
-
-              <a className="editorial-link" href="#contato">
-                <span>Elevar Percepção Visual</span>
-                <ArrowUpRight size={16} />
+          {/* SERVIÇO 04: IMAGENS E CONTEÚDO VISUAL */}
+          <article className="solution-feature solution-feature--reversed">
+            <div className="solution-feature__meta">
+              <span className="solution-feature__number">SERVIÇO 04</span>
+              <h3 className="solution-feature__title">IMAGENS E CONTEÚDO VISUAL</h3>
+              <p className="solution-feature__text">
+                Conteúdo visual profissional para produtos, serviços, campanhas e redes sociais.
+              </p>
+              <a
+                className="solution-feature__cta"
+                href={buildWhatsappUrl("Olá! Gostaria de criar conteúdo visual e imagens profissionais para a minha marca.")}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Desenvolver Conteúdo Visual</span>
+                <ArrowUpRight size={15} />
               </a>
-            </article>
+            </div>
 
-            {/* Serviço 5: Materiais de Divulgação */}
-            <article className="editorial-block editorial-block--social">
-              <div className="editorial-block__meta">
-                <span className="editorial-block__category">COMUNICAÇÃO / 05</span>
-                <h3 className="editorial-block__heading">Materiais de Divulgação</h3>
-                <p className="editorial-block__text">
-                  Peças digitais estratégicas para WhatsApp, Instagram e campanhas de anúncios, pensadas para reter atenção imediata no feed e no direct.
-                </p>
-              </div>
-
-              <div className="editorial-block__visual editorial-block__visual--social-feed">
-                <div className="mockup-feed nx-tilt-element" ref={feedTiltRef}>
-                  <div className="mockup-feed__post">
-                    <div className="mockup-feed__post-header">
-                      <span className="mockup-feed__avatar" />
-                      <span>@nexora.digital</span>
+            <div className="solution-feature__visual">
+              <div className="solution-canvas" style={{ background: "transparent", border: "none", boxShadow: "none" }}>
+                {serviceMediaAssets.visualContentImage ? (
+                  <img
+                    src={serviceMediaAssets.visualContentImage}
+                    alt="Imagens e Conteúdo Visual NEXORA"
+                    className="solution-canvas__img"
+                  />
+                ) : (
+                  <div className="mockup-studio">
+                    <div className="mockup-studio__item mockup-studio__item--main">
+                      <span className="mockup-studio__caption">Estúdio Visual</span>
+                      <div className="mockup-studio__title">Direção de Arte &amp; Identidade de Produto</div>
                     </div>
-                    <div className="mockup-feed__post-image">
-                      <p>Design de Impacto para Vender Mais</p>
+                    <div className="mockup-studio__item mockup-studio__item--side1">
+                      <Palette size={20} color="var(--cyan)" />
+                      <div className="mockup-studio__title">Post Instagram</div>
                     </div>
-                    <div className="mockup-feed__post-actions">
-                      <Share2 size={15} />
-                      <span>Comunicação pronta para conversão</span>
+                    <div className="mockup-studio__item mockup-studio__item--side2">
+                      <Layers size={20} color="#ffffff" />
+                      <div className="mockup-studio__title">Banner Promocional</div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
+            </div>
+          </article>
 
-              <a className="editorial-link" href="#contato">
+          {/* SERVIÇO 05: MATERIAIS DE DIVULGAÇÃO */}
+          <article className="solution-feature">
+            <div className="solution-feature__meta">
+              <span className="solution-feature__number">SERVIÇO 05</span>
+              <h3 className="solution-feature__title">MATERIAIS DE DIVULGAÇÃO</h3>
+              <p className="solution-feature__text">
+                Materiais digitais para fortalecer a comunicação da sua empresa.
+              </p>
+              <a
+                className="solution-feature__cta"
+                href={buildWhatsappUrl("Olá! Quero produzir materiais de divulgação para WhatsApp, Instagram e anúncios.")}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span>Criar Materiais de Divulgação</span>
-                <ArrowUpRight size={16} />
+                <ArrowUpRight size={15} />
               </a>
-            </article>
-          </div>
+            </div>
+
+            <div className="solution-feature__visual">
+              <div className="solution-canvas" style={{ background: "transparent", border: "none", boxShadow: "none" }}>
+                {serviceMediaAssets.marketingMaterialImage ? (
+                  <img
+                    src={serviceMediaAssets.marketingMaterialImage}
+                    alt="Materiais de Divulgação Digital NEXORA"
+                    className="solution-canvas__img"
+                  />
+                ) : (
+                  <div className="mockup-marketing">
+                    <div className="mockup-marketing__post">
+                      <div className="mockup-marketing__user">
+                        <div className="mockup-marketing__avatar" />
+                        <span>suaempresa.oficial</span>
+                      </div>
+                      <div className="mockup-marketing__banner">
+                        Comunicação Clara que Gera Resultados
+                      </div>
+                      <div className="mockup-marketing__meta">
+                        <span>Instagram &amp; Redes</span>
+                        <span>Engajamento</span>
+                      </div>
+                    </div>
+
+                    <div className="mockup-marketing__chat">
+                      <div className="mockup-marketing__user">
+                        <MessageCircle size={15} color="var(--cyan)" />
+                        <span>WhatsApp Direto</span>
+                      </div>
+                      <div className="mockup-marketing__bubble">
+                        Olá! Gostaria de receber mais informações sobre o seu serviço.
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -535,70 +552,54 @@ function ServicesSection() {
 }
 
 function WhyNexoraSection() {
-  const sectionRef = useSectionReveal<HTMLElement>();
-
   return (
-    <section
-      className="positioning-section reveal-block"
-      id="por-que-nexora"
-      ref={sectionRef}
-      aria-labelledby="positioning-title"
-    >
-      <div className="positioning-section__shell">
-        <div className="positioning-editorial">
-          {/* Coluna Esquerda: Declaração Principal */}
-          <div className="positioning-statement">
-            <span className="positioning-tag reveal-elem" style={{ animationDelay: "100ms" }}>POSICIONAMENTO NEXORA</span>
-            <h2 id="positioning-title" className="positioning-headline reveal-elem" style={{ animationDelay: "200ms" }}>
-              Seu negócio não precisa de mais complexidade.
-              <span className="positioning-headline__accent">
-                Precisa da solução certa.
-              </span>
+    <section className="why-section" id="por-que-nexora" aria-labelledby="why-title">
+      <div className="nx-container">
+        <div className="why-editorial">
+          <div className="why-editorial__left">
+            <span className="why-editorial__tag">Por que a NEXORA?</span>
+            <h2 id="why-title" className="why-editorial__headline">
+              Por que a NEXORA?
             </h2>
-            <p className="positioning-lead reveal-elem" style={{ animationDelay: "320ms" }}>
-              A maioria das empresas se perde entre ferramentas confusas e promessas vazias. 
-              Na NEXORA, aliamos rigor estético, tecnologia sólida e visão comercial prática para entregar aquilo que realmente gera tração.
+            <p className="why-editorial__lead">
+              Não queremos apenas criar algo bonito. Queremos criar soluções digitais que façam sentido para o seu negócio.
             </p>
 
-            <div className="positioning-cta-wrap">
-              <a className="nx-btn nx-btn--primary" href="#contato">
-                <span>Iniciar conversa estratégica</span>
-                <ArrowUpRight size={18} />
-              </a>
+            <div className="why-editorial__callout">
+              <div className="why-editorial__callout-title">
+                Seu negócio não precisa de mais complexidade. Precisa da solução certa.
+              </div>
             </div>
           </div>
 
-          {/* Coluna Direita: 3 Pilares Fundamentais */}
-          <div className="positioning-pillars reveal-elem" style={{ animationDelay: "400ms" }}>
-            <article className="pillar-item">
-              <div className="pillar-item__number">01</div>
-              <div className="pillar-item__content">
-                <h3 className="pillar-item__title">Entendimento antes da execução</h3>
-                <p className="pillar-item__desc">
-                  Entendemos o objetivo da sua empresa antes de criar a solução. Não vendemos pacotes prontos; desenhamos o que faz sentido para o seu momento.
-                </p>
-              </div>
-            </article>
+          <div className="why-editorial__right">
+            <div className="why-pillar">
+              <span className="why-pillar__tag">PENSADO PARA O SEU NEGÓCIO</span>
+              <p className="why-pillar__text">
+                Entendemos o objetivo antes de definir a solução.
+              </p>
+            </div>
 
-            <article className="pillar-item">
-              <div className="pillar-item__number">02</div>
-              <div className="pillar-item__content">
-                <h3 className="pillar-item__title">Tecnologia, IA e Criatividade</h3>
-                <p className="pillar-item__desc">
-                  Unimos tecnologia de ponta, inteligência artificial e criatividade contemporânea para conceber produtos digitais rápidos, escaláveis e esteticamente impecáveis.
-                </p>
-              </div>
-            </article>
+            <div className="why-pillar">
+              <span className="why-pillar__tag">TECNOLOGIA + CRIATIVIDADE</span>
+              <p className="why-pillar__text">
+                Unimos tecnologia, inteligência artificial e criatividade.
+              </p>
+            </div>
 
-            <article className="pillar-item">
-              <div className="pillar-item__number">03</div>
-              <div className="pillar-item__content">
-                <h3 className="pillar-item__title">Experiências simples e funcionais</h3>
-                <p className="pillar-item__desc">
-                  Projetamos experiências digitais simples, profissionais e funcionais. Seu cliente navega sem atrito e toma a decisão de compra com clareza.
-                </p>
-              </div>
-            </article>
+            <div className="why-pillar">
+              <span className="why-pillar__tag">SIMPLES E DIRETO</span>
+              <p className="why-pillar__text">
+                Entendemos, criamos e entregamos de forma clara.
+              </p>
+            </div>
+
+            <div className="why-pillar">
+              <span className="why-pillar__tag">FOCO NO RESULTADO</span>
+              <p className="why-pillar__text">
+                Cada projeto possui um objetivo definido.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -606,237 +607,211 @@ function WhyNexoraSection() {
   );
 }
 
-const methodSteps = [
-  {
-    step: "01",
-    name: "CONVERSA",
-    subtitle: "Diagnóstico inicial",
-    text: "Você nos conta o que sua empresa precisa, seus desafios atuais e onde deseja chegar.",
-  },
-  {
-    step: "02",
-    name: "ESTRATÉGIA",
-    subtitle: "Arquitetura & Direção",
-    text: "Analisamos o objetivo comercial e definimos o formato ideal com cronograma objetivo.",
-  },
-  {
-    step: "03",
-    name: "CRIAÇÃO",
-    subtitle: "Design & Desenvolvimento",
-    text: "Nossa equipe desenvolve o projeto visual e técnico com revisões refinadas lado a lado.",
-  },
-  {
-    step: "04",
-    name: "ENTREGA",
-    subtitle: "Lançamento em produção",
-    text: "Você recebe uma solução pronta para utilizar, testada, rápida e orientada a conversão.",
-  },
-] as const;
-
 function ProcessSection() {
-  const sectionRef = useSectionReveal<HTMLElement>();
+  const steps = [
+    {
+      step: "01",
+      name: "CONVERSA",
+      desc: "Entendimento inicial do objetivo da sua empresa e dos desafios a serem superados.",
+    },
+    {
+      step: "02",
+      name: "ESTRATÉGIA",
+      desc: "Definição do formato ideal, da arquitetura e das diretrizes do projeto.",
+    },
+    {
+      step: "03",
+      name: "CRIAÇÃO",
+      desc: "Desenvolvimento visual, tecnológico e refinamento estético de alto padrão.",
+    },
+    {
+      step: "04",
+      name: "ENTREGA",
+      desc: "Lançamento da solução pronta para uso com clareza e suporte.",
+    },
+  ];
 
   return (
-    <section
-      className="method-section reveal-block"
-      id="como-funciona"
-      ref={sectionRef}
-      aria-labelledby="method-headline"
-    >
-      <div className="method-section__shell">
-        <header className="method-header reveal-elem" style={{ animationDelay: "150ms" }}>
-          <div className="method-header__tag">MÉTODO CLARO &amp; TRANSPARENTE</div>
-          <div className="method-header__split">
-            <h2 id="method-headline" className="method-header__title">
-              Do diagnóstico à entrega <span className="text-shimmer">definitiva.</span>
-            </h2>
-            <p className="method-header__desc">
-              Um fluxo horizontal limpo, sem reuniões desnecessárias ou processos lentos. Direto ao ponto, com precisão técnica e atenção aos detalhes.
-            </p>
-          </div>
+    <section className="process-section" id="como-funciona" aria-labelledby="process-title">
+      <div className="nx-container">
+        <header className="section-header">
+          <span className="section-header__tag">Como funciona</span>
+          <h2 id="process-title" className="section-header__title">
+            Do problema à solução.
+          </h2>
+          <p className="section-header__desc">
+            Entendemos o que sua empresa precisa, planejamos a solução e colocamos tudo para funcionar.
+          </p>
         </header>
 
-        {/* Linha Horizontal Desktop / Vertical Mobile */}
-        <div className="method-timeline reveal-elem" role="list" style={{ animationDelay: "300ms" }}>
-          <div className="method-timeline__axis" aria-hidden="true" />
-          {methodSteps.map(({ step, name, subtitle, text }, index) => (
-            <div className="method-step" role="listitem" key={step}>
-              <div className="method-step__marker">
-                <span className="method-step__digit">{step}</span>
-                <span className="method-step__dot" />
-              </div>
-              <div className="method-step__body">
-                <span className="method-step__label">{subtitle}</span>
-                <h3 className="method-step__name">{name}</h3>
-                <p className="method-step__text">{text}</p>
-              </div>
+        <div className="process-track">
+          <div className="process-track__line" aria-hidden="true" />
+          {steps.map((item) => (
+            <div key={item.step} className="process-node">
+              <div className="process-node__step">{item.step}</div>
+              <h3 className="process-node__name">{item.name}</h3>
+              <p className="process-node__desc">{item.desc}</p>
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="method-banner">
-          <div className="method-banner__content">
-            <h3>Cada empresa tem uma necessidade diferente.</h3>
-            <p>
-              Por isso não aplicamos soluções engessadas. Conversamos abertamente para desenhar exatamente a solução que trará retorno.
+function AboutSection() {
+  return (
+    <section className="about-section" id="sobre-nos" aria-labelledby="about-title">
+      <div className="nx-container">
+        <div className="about-grid">
+          <div className="about-manifesto">
+            <span className="about-manifesto__tag">SOBRE A NEXORA</span>
+            <h2 id="about-title" className="about-manifesto__title">
+              Construindo presenças digitais que fazem sentido.
+            </h2>
+            <div className="about-manifesto__paragraphs">
+              <p>
+                A NEXORA nasceu com uma ideia simples: ajudar empresas a se apresentarem melhor no mundo digital.
+              </p>
+              <p>
+                Unimos tecnologia, inteligência artificial, estratégia e criatividade para transformar necessidades reais em soluções digitais.
+              </p>
+              <p>
+                Estamos construindo a NEXORA com foco em uma coisa: criar trabalhos que façam sentido para cada negócio.
+              </p>
+            </div>
+          </div>
+
+          <div className="about-visual">
+            <div className="about-visual__quote">
+              "Não criamos por criar.<br />
+              Criamos com um <em>propósito.</em>"
+            </div>
+            <p className="about-visual__sub">
+              Nossa dedicação é criar soluções que entreguem clareza, credibilidade e solidez comercial para marcas contemporâneas.
             </p>
           </div>
-          <a
-            className="nx-btn nx-btn--pill-accent"
-            href={whatsappContactUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>Conversar via WhatsApp</span>
-            <ArrowUpRight size={17} />
-          </a>
         </div>
       </div>
     </section>
   );
 }
 
-function ContactSection() {
-  const sectionRef = useSectionReveal<HTMLElement>();
-
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const message = [
-      "Olá, NEXORA! Gostaria de conversar sobre uma solução digital para a minha empresa.",
-      "",
-      `Nome: ${formData.get("name")}`,
-      `Empresa: ${formData.get("company")}`,
-      `WhatsApp: ${formData.get("whatsapp")}`,
-      `Serviço de interesse: ${formData.get("service")}`,
-      `Mensagem: ${formData.get("message")}`,
-    ].join("\n");
-
-    window.open(buildWhatsappUrl(message), "_blank", "noopener,noreferrer");
-    event.currentTarget.reset();
-  };
-
+function TransformationSection() {
   return (
-    <section
-      className="final-cta-section reveal-block"
-      id="contato"
-      ref={sectionRef}
-      aria-labelledby="cta-headline"
-    >
-      <div className="final-cta-section__shell">
-        <div className="final-cta-card reveal-elem" style={{ animationDelay: "200ms" }}>
-          <div className="final-cta-card__glow" aria-hidden="true" />
+    <section className="transformation-section" aria-labelledby="transformation-title">
+      <div className="nx-container">
+        <header className="section-header">
+          <span className="section-header__tag">Demonstração de Transformação</span>
+          <h2 id="transformation-title" className="section-header__title">
+            Antes e depois.
+          </h2>
+          <p className="section-header__desc">
+            Uma presença digital desorganizada pode esconder o valor de um negócio.
+          </p>
+        </header>
 
-          <div className="final-cta-grid">
-            {/* Esquerda: Chamada Marcante e Impactante */}
-            <div className="final-cta-copy">
-              <span className="final-cta-tag">INICIAR PARCERIA</span>
-              <h2 id="cta-headline" className="final-cta-title">
-                Vamos construir isso <span className="text-shimmer">juntos.</span>
-              </h2>
-              <p className="final-cta-desc">
-                Conte o que sua empresa precisa hoje. Vamos entender seu objetivo de negócio e apresentar a solução visual e tecnológica definitiva.
-              </p>
-
-              <div className="final-cta-direct">
-                <a
-                  className="nx-btn nx-btn--big-cta"
-                  href={whatsappContactUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <MessageCircle size={22} />
-                  <span>Falar com a NEXORA</span>
-                  <ArrowUpRight size={20} />
-                </a>
-
-                <div className="final-cta-guarantees">
-                  <div className="cta-guarantee-pill">
-                    <CheckCircle2 size={15} />
-                    <span>Atendimento rápido e direto</span>
-                  </div>
-                  <div className="cta-guarantee-pill">
-                    <CheckCircle2 size={15} />
-                    <span>Sem custos para orçamento</span>
-                  </div>
-                </div>
-              </div>
+        <div className="transformation-comparison">
+          {/* Lado Esquerdo: ANTES */}
+          <div className="comparison-card comparison-card--before">
+            <div className="comparison-card__header">
+              <span className="comparison-card__label">ANTES</span>
+              <span className="comparison-card__status-dot" />
             </div>
 
-            {/* Direita: Formulário Limpo e Elegante */}
-            <div className="final-cta-form-wrap">
-              <form className="nx-form" onSubmit={handleFormSubmit}>
-                <div className="nx-form__head">
-                  <h3>Envie uma mensagem direta</h3>
-                  <p>Preencha os campos para receber contato prioritário.</p>
-                </div>
+            <ul className="comparison-card__list">
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✕</span>
+                <span>Identidade desorganizada</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✕</span>
+                <span>Site ruim ou inexistente</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✕</span>
+                <span>Informações espalhadas</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✕</span>
+                <span>Comunicação confusa</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✕</span>
+                <span>Materiais inconsistentes</span>
+              </li>
+            </ul>
+          </div>
 
-                <div className="nx-form__fields">
-                  <div className="nx-form__row">
-                    <label className="nx-form__field">
-                      <span>Nome</span>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Como prefere ser chamado"
-                        required
-                      />
-                    </label>
-                    <label className="nx-form__field">
-                      <span>Empresa</span>
-                      <input
-                        type="text"
-                        name="company"
-                        placeholder="Nome da sua marca"
-                        required
-                      />
-                    </label>
-                  </div>
+          {/* Lado Direito: DEPOIS */}
+          <div className="comparison-card comparison-card--after">
+            <div className="comparison-card__header">
+              <span className="comparison-card__label">DEPOIS</span>
+              <span className="comparison-card__status-dot" />
+            </div>
 
-                  <div className="nx-form__row">
-                    <label className="nx-form__field">
-                      <span>WhatsApp / Telefone</span>
-                      <input
-                        type="tel"
-                        name="whatsapp"
-                        placeholder="(DDD) 99999-9999"
-                        required
-                      />
-                    </label>
-                    <label className="nx-form__field">
-                      <span>Serviço desejado</span>
-                      <select name="service" defaultValue="" required>
-                        <option value="" disabled>
-                          Selecione um serviço
-                        </option>
-                        {serviceOptions.map((service) => (
-                          <option value={service} key={service}>
-                            {service}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
+            <ul className="comparison-card__list">
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Identidade organizada</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Site profissional</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Comunicação clara</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Experiência mobile melhor</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Materiais visualmente consistentes</span>
+              </li>
+              <li className="comparison-card__item">
+                <span className="comparison-card__item-icon">✓</span>
+                <span>Presença digital profissional</span>
+              </li>
+            </ul>
 
-                  <label className="nx-form__field nx-form__field--full">
-                    <span>Detalhes do projeto</span>
-                    <textarea
-                      name="message"
-                      rows={4}
-                      placeholder="Conte resumidamente o que você deseja desenvolver ou melhorar na presença digital da sua empresa..."
-                      required
-                    />
-                  </label>
-                </div>
-
-                <button type="submit" className="nx-btn nx-btn--form-submit">
-                  <span>Enviar para a equipe NEXORA</span>
-                  <Send size={17} />
-                </button>
-              </form>
+            <div className="comparison-card__pills">
+              <span className="comparison-pill">Mais clareza</span>
+              <span className="comparison-pill">Mais organização</span>
+              <span className="comparison-pill">Melhor experiência</span>
+              <span className="comparison-pill">Comunicação mais profissional</span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCtaSection() {
+  return (
+    <section className="final-cta-section" id="contato" aria-labelledby="final-cta-title">
+      <div className="nx-container">
+        <div className="final-cta-box">
+          <h2 id="final-cta-title" className="final-cta-box__title">
+            Tem uma ideia para sua empresa?
+          </h2>
+          <p className="final-cta-box__text">
+            Vamos entender o que você precisa e conversar sobre a melhor solução.
+          </p>
+
+          <a
+            className="nx-btn nx-btn--big-cta"
+            href={defaultWhatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <MessageCircle size={20} />
+            <span>Falar com a NEXORA</span>
+            <ArrowUpRight size={18} />
+          </a>
         </div>
       </div>
     </section>
@@ -846,51 +821,53 @@ function ContactSection() {
 function SiteFooter() {
   return (
     <footer className="nx-footer">
-      <div className="nx-footer__shell">
-        <div className="nx-footer__top">
+      <div className="nx-container">
+        <div className="nx-footer__main">
           <div className="nx-footer__brand">
             <a href="#inicio" aria-label="NEXORA Início">
               <NexoraLogo />
             </a>
             <p className="nx-footer__tagline">
-              Inteligência que faz empresas crescerem. Design contemporâneo, engenharia e estratégia digital de alto padrão.
+              Inteligência que faz empresas crescerem.
             </p>
           </div>
 
-          <div className="nx-footer__nav-group">
-            <span className="nx-footer__heading">Navegação</span>
-            <a href="#inicio">Início</a>
-            <a href="#servicos">Serviços</a>
-            <a href="#por-que-nexora">Posicionamento</a>
-            <a href="#como-funciona">Como funciona</a>
-            <a href="#contato">Contato</a>
-          </div>
+          <div className="nx-footer__nav">
+            <div className="nx-footer__col">
+              <span className="nx-footer__col-title">Navegação</span>
+              <a href="#inicio" className="nx-footer__link">Início</a>
+              <a href="#servicos" className="nx-footer__link">Serviços</a>
+              <a href="#por-que-nexora" className="nx-footer__link">Por que a NEXORA?</a>
+              <a href="#como-funciona" className="nx-footer__link">Como funciona</a>
+              <a href="#sobre-nos" className="nx-footer__link">Sobre nós</a>
+              <a href="#contato" className="nx-footer__link">Contato</a>
+            </div>
 
-          <div className="nx-footer__nav-group">
-            <span className="nx-footer__heading">Serviços</span>
-            <a href="#servicos">Criação de Sites</a>
-            <a href="#servicos">Landing Pages</a>
-            <a href="#servicos">Cardápios Digitais</a>
-            <a href="#servicos">Imagens e Conteúdo</a>
-            <a href="#servicos">Materiais de Divulgação</a>
-          </div>
-
-          <div className="nx-footer__nav-group">
-            <span className="nx-footer__heading">Contato Rápido</span>
-            <a href={whatsappContactUrl} target="_blank" rel="noreferrer">
-              <MessageCircle size={15} />
-              WhatsApp Oficial
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
-              <Instagram size={15} />
-              Instagram
-            </a>
+            <div className="nx-footer__col">
+              <span className="nx-footer__col-title">Contato</span>
+              <a
+                href={defaultWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="nx-footer__link"
+              >
+                WhatsApp
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                className="nx-footer__link"
+              >
+                Instagram
+              </a>
+            </div>
           </div>
         </div>
 
         <div className="nx-footer__bottom">
-          <p>© {new Date().getFullYear()} NEXORA Soluções Digitais. Todos os direitos reservados.</p>
-          <a href="#inicio" className="nx-footer__top-link">
+          <p>© {new Date().getFullYear()} NEXORA. Todos os direitos reservados.</p>
+          <a href="#inicio" className="nx-btn--primary-link">
             <span>Voltar ao topo</span>
             <ArrowUpRight size={14} />
           </a>
@@ -909,7 +886,9 @@ function Index() {
         <ServicesSection />
         <WhyNexoraSection />
         <ProcessSection />
-        <ContactSection />
+        <AboutSection />
+        <TransformationSection />
+        <FinalCtaSection />
       </main>
       <SiteFooter />
     </div>
@@ -923,7 +902,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Soluções digitais de alto nível: websites corporativos, landing pages de alta conversão, cardápios digitais e direção de arte contemporânea.",
+          "Criamos soluções digitais para empresas que querem melhorar sua presença, sua comunicação e sua forma de vender.",
       },
       {
         property: "og:title",
@@ -932,7 +911,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Presença digital moderna, confiável e comercialmente impactante para sua empresa.",
+          "Criamos soluções digitais para empresas que querem melhorar sua presença, sua comunicação e sua forma de vender.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -946,7 +925,7 @@ export const Route = createFileRoute("/")({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
       },
     ],
   }),
