@@ -194,23 +194,72 @@
   animation: hello-breathe 9s ease-in-out infinite;
 }
 
-.hello-word {
-  position: relative;
-  z-index: 1;
-  font-family: "Instrument Serif", ui-serif, Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(7rem, 34vw, 24rem);
-  line-height: 0.85;
-  letter-spacing: -0.045em;
-  transition:
-    color 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
-    translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-  animation: hello-rise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+.hello-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(90vw, 760px);
+  gap: clamp(0.75rem, 3vw, 1.75rem);
 }
 
-.hello-stage:hover .hello-word {
+.hello-button {
+  --button-duration: 3.5s;
+  --button-delay: 0s;
+  --button-tilt: 0deg;
+  --button-x: 0px;
+  --button-y: 0px;
+
+  min-width: 0;
+  min-height: clamp(5.5rem, 13vw, 7.5rem);
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  font-family: "Instrument Serif", ui-serif, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 7vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  cursor: pointer;
+  box-shadow: 0 20px 42px -22px var(--hello);
+  transition:
+    scale 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.25s ease;
+  animation: hello-button-move var(--button-duration) ease-in-out
+    var(--button-delay) infinite;
+}
+
+.hello-button--1 {
+  background: var(--hello);
   color: var(--hello-deep);
-  translate: 0 -0.03em;
+}
+
+.hello-button--2 {
+  border-color: var(--hello);
+  background: color-mix(in oklab, var(--hello-soft) 42%, transparent);
+  color: var(--hello-deep);
+}
+
+.hello-button--3 {
+  background: var(--hello-soft);
+  color: var(--hello-deep);
+}
+
+.hello-button--4 {
+  border-color: var(--hello);
+  background: color-mix(in oklab, var(--background) 78%, transparent);
+  color: var(--hello);
+}
+
+.hello-button:hover {
+  scale: 1.08;
+  box-shadow: 0 24px 52px -18px var(--hello);
+}
+
+.hello-button:active {
+  scale: 0.96;
+}
+
+.hello-button:focus-visible {
+  outline: 3px solid var(--hello);
+  outline-offset: 5px;
 }
 
 .hello-stage:hover .hello-glow {
@@ -218,18 +267,19 @@
   opacity: 1;
 }
 
-@keyframes hello-rise {
-  from {
-    opacity: 0;
-    translate: 0 0.35em;
-    scale: 0.96;
-    filter: blur(14px);
-  }
-  to {
-    opacity: 1;
+@keyframes hello-button-move {
+  0%,
+  100% {
     translate: 0 0;
-    scale: 1;
-    filter: blur(0);
+    rotate: var(--button-tilt);
+  }
+  35% {
+    translate: var(--button-x) var(--button-y);
+    rotate: calc(var(--button-tilt) - 5deg);
+  }
+  70% {
+    translate: calc(var(--button-x) * -0.7) calc(var(--button-y) * -0.7);
+    rotate: calc(var(--button-tilt) + 6deg);
   }
 }
 
@@ -246,8 +296,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hello-word,
+  .hello-button,
   .hello-glow {
     animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hello-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .hello-button {
+    min-height: clamp(5rem, 25vw, 6.5rem);
   }
 }
