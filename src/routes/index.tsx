@@ -1,4 +1,13 @@
-import { Menu, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Image,
+  Megaphone,
+  Menu,
+  Monitor,
+  PanelsTopLeft,
+  Smartphone,
+  X,
+} from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
@@ -8,6 +17,44 @@ const navigationItems = [
   { label: "Como funciona", href: "#como-funciona" },
   { label: "Sobre nós", href: "#sobre" },
   { label: "Contato", href: "#contato" },
+] as const;
+
+const services = [
+  {
+    number: "01",
+    icon: Monitor,
+    title: "CRIAÇÃO DE SITES",
+    description:
+      "Sites modernos, rápidos e responsivos para apresentar sua empresa e transformar visitantes em clientes.",
+  },
+  {
+    number: "02",
+    icon: PanelsTopLeft,
+    title: "LANDING PAGES",
+    description:
+      "Páginas focadas em uma oferta, produto ou serviço, pensadas para gerar contatos e conversões.",
+  },
+  {
+    number: "03",
+    icon: Smartphone,
+    title: "CARDÁPIOS DIGITAIS",
+    description:
+      "Cardápios digitais modernos, organizados e fáceis de acessar pelo celular.",
+  },
+  {
+    number: "04",
+    icon: Image,
+    title: "IMAGENS E CONTEÚDO VISUAL",
+    description:
+      "Artes e imagens profissionais para divulgar produtos, serviços, promoções e sua marca.",
+  },
+  {
+    number: "05",
+    icon: Megaphone,
+    title: "MATERIAIS DE DIVULGAÇÃO",
+    description:
+      "Materiais digitais para Instagram, WhatsApp e outros canais de comunicação.",
+  },
 ] as const;
 
 function NexoraLogo() {
@@ -201,6 +248,62 @@ function GrowthComposition() {
   );
 }
 
+function ServicesSection() {
+  return (
+    <section
+      className="services-section"
+      id="servicos"
+      aria-labelledby="services-title"
+    >
+      <div className="services-section__inner">
+        <div className="services-section__heading">
+          <div>
+            <p className="section-eyebrow">
+              <span aria-hidden="true" />
+              SERVIÇOS
+            </p>
+            <h2 id="services-title">
+              Serviços que colocam sua empresa no <em>digital.</em>
+            </h2>
+          </div>
+
+          <p className="services-section__intro">
+            Do primeiro contato com seu cliente até a apresentação da sua marca,
+            criamos soluções digitais pensadas para tornar sua empresa mais
+            profissional e mais fácil de encontrar.
+          </p>
+        </div>
+
+        <div className="services-grid">
+          {services.map(({ number, icon: Icon, title, description }) => (
+            <article className="service-item" key={title}>
+              <div className="service-item__top">
+                <span className="service-item__icon" aria-hidden="true">
+                  <Icon size={27} strokeWidth={1.5} />
+                </span>
+                <span className="service-item__number">{number}</span>
+              </div>
+              <div className="service-item__content">
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+              <span className="service-item__signal" aria-hidden="true" />
+            </article>
+          ))}
+        </div>
+
+        <div className="services-cta" id="contato">
+          <p>Tem uma ideia ou precisa melhorar a presença digital da sua empresa?</p>
+          <a className="button button--primary" href="#contato">
+            Falar com a NEXORA
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Index() {
   return (
     <main className="nexora-page">
@@ -223,7 +326,7 @@ function Index() {
               presença, sua comunicação e sua forma de vender.
             </p>
 
-            <div className="hero__actions" id="contato">
+            <div className="hero__actions">
               <a className="button button--primary" href="#servicos">
                 Conhecer nossos serviços
               </a>
@@ -232,7 +335,7 @@ function Index() {
               </a>
             </div>
 
-            <p className="hero__services" id="servicos">
+            <p className="hero__services">
               <span>Sites</span>
               <i aria-hidden="true">•</i>
               <span>Landing Pages</span>
@@ -255,6 +358,8 @@ function Index() {
           <span>Crescimento</span>
         </div>
       </section>
+
+      <ServicesSection />
     </main>
   );
 }
