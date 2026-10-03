@@ -17,6 +17,10 @@ import {
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Hero3DArtwork } from "../components/canvas/Hero3DArtwork";
+import { SectionTransition } from "../components/canvas/SectionTransition";
+import { useParallax, useTiltCard } from "../hooks/useVisualExperience";
+
 
 const navigationItems = [
   { label: "Início", href: "#inicio" },
@@ -200,83 +204,6 @@ function SiteHeader() {
   );
 }
 
-function HeroCinematicCanvas() {
-  return (
-    <div className="hero-artwork" role="img" aria-label="Composição visual cinematográfica NEXORA">
-      <div className="hero-artwork__glow-back" aria-hidden="true" />
-      <div className="hero-artwork__ambient" aria-hidden="true" />
-      
-      {/* Editorial floating layered composition */}
-      <div className="hero-artwork__stage">
-        {/* Main Showcase Device / Canvas */}
-        <div className="hero-artwork__screen">
-          <div className="hero-artwork__screen-header">
-            <div className="hero-artwork__screen-dots">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="hero-artwork__screen-url">nexora.digital/experience</div>
-          </div>
-          <div className="hero-artwork__screen-body">
-            <div className="hero-artwork__screen-hero">
-              <span className="hero-artwork__screen-badge">Digital Flagship</span>
-              <p className="hero-artwork__screen-heading">Presença de alto impacto.</p>
-              <div className="hero-artwork__screen-bars">
-                <span className="hero-artwork__bar hero-artwork__bar--w80" />
-                <span className="hero-artwork__bar hero-artwork__bar--w50" />
-              </div>
-            </div>
-            <div className="hero-artwork__screen-tiles">
-              <div className="hero-artwork__tile hero-artwork__tile--highlight">
-                <div className="hero-artwork__tile-metric">+240%</div>
-                <div className="hero-artwork__tile-label">Conversão Comercial</div>
-              </div>
-              <div className="hero-artwork__tile">
-                <div className="hero-artwork__tile-stat">99.8%</div>
-                <div className="hero-artwork__tile-label">Retenção de Marca</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Floating Mobile Specimen */}
-        <div className="hero-artwork__mobile-float">
-          <div className="hero-artwork__mobile-notch" />
-          <div className="hero-artwork__mobile-content">
-            <div className="hero-artwork__mobile-top">
-              <span className="hero-artwork__mobile-avatar" />
-              <div>
-                <span className="hero-artwork__mobile-line1" />
-                <span className="hero-artwork__mobile-line2" />
-              </div>
-            </div>
-            <div className="hero-artwork__mobile-hero">
-              <p>Experiência Mobile First</p>
-              <span>Design fluido para vendas instantâneas</span>
-            </div>
-            <div className="hero-artwork__mobile-action">
-              <span>Iniciar Pedido</span>
-              <ArrowUpRight size={13} />
-            </div>
-          </div>
-        </div>
-
-        {/* Floating Accent Capsule */}
-        <div className="hero-artwork__badge-float">
-          <div className="hero-artwork__badge-icon">
-            <Sparkles size={16} />
-          </div>
-          <div>
-            <strong className="hero-artwork__badge-title">Tecnologia &amp; Design</strong>
-            <span className="hero-artwork__badge-sub">Padrão de excelência internacional</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Hero() {
   return (
     <section className="hero-section" id="inicio" aria-labelledby="hero-title">
@@ -291,7 +218,7 @@ function Hero() {
             <h1 id="hero-title" className="hero-copy__title">
               Inteligência que faz
               <span className="hero-copy__title-highlight">
-                empresas <em>crescerem.</em>
+                empresas <em className="text-shimmer">crescerem.</em>
               </span>
             </h1>
 
@@ -329,7 +256,7 @@ function Hero() {
           </div>
 
           <div className="hero-visual-column">
-            <HeroCinematicCanvas />
+            <Hero3DArtwork />
           </div>
         </div>
 
@@ -358,6 +285,12 @@ function Hero() {
 
 function ServicesSection() {
   const sectionRef = useSectionReveal<HTMLElement>();
+  const flagshipTiltRef = useTiltCard<HTMLDivElement>(4);
+  const campaignTiltRef = useTiltCard<HTMLDivElement>(5);
+  const phoneTiltRef = useTiltCard<HTMLDivElement>(6);
+  const galleryTiltRef = useTiltCard<HTMLDivElement>(5);
+  const feedTiltRef = useTiltCard<HTMLDivElement>(5);
+  const flagshipParallaxRef = useParallax<HTMLDivElement>(0.06);
 
   return (
     <section
@@ -373,8 +306,8 @@ function ServicesSection() {
             PORTFÓLIO &amp; SOLUÇÕES
           </div>
           <div className="editorial-header__split">
-            <h2 id="services-headline" className="editorial-header__title">
-              Construímos a presença <em>digital</em> da sua empresa.
+            <h2 id="services-headline" className="editorial-header__title reveal-elem" style={{ animationDelay: "180ms" }}>
+              Construímos a presença <span className="text-shimmer">digital</span> da sua empresa.
             </h2>
             <p className="editorial-header__desc">
               Cada ponto de contato digital deve comunicar solidez, autoridade e sofisticação.
@@ -403,8 +336,8 @@ function ServicesSection() {
               </a>
             </div>
 
-            <div className="editorial-block__visual editorial-block__visual--desktop">
-              <div className="mockup-browser">
+            <div className="editorial-block__visual editorial-block__visual--desktop" ref={flagshipParallaxRef}>
+              <div className="mockup-browser nx-tilt-element" ref={flagshipTiltRef}>
                 <div className="mockup-browser__bar">
                   <div className="mockup-browser__dots">
                     <span />
@@ -451,7 +384,7 @@ function ServicesSection() {
               </div>
 
               <div className="editorial-block__visual editorial-block__visual--campaign">
-                <div className="mockup-campaign">
+                <div className="mockup-campaign nx-tilt-element" ref={campaignTiltRef}>
                   <div className="mockup-campaign__header">
                     <span className="mockup-campaign__tag">Oferta Especial</span>
                     <span className="mockup-campaign__live">TEMPO LIMITADO</span>
@@ -491,7 +424,7 @@ function ServicesSection() {
               </div>
 
               <div className="editorial-block__visual editorial-block__visual--phone">
-                <div className="mockup-phone">
+                <div className="mockup-phone nx-tilt-element" ref={phoneTiltRef}>
                   <div className="mockup-phone__screen">
                     <div className="mockup-phone__speaker" />
                     <div className="mockup-phone__app-bar">
@@ -542,7 +475,7 @@ function ServicesSection() {
               </div>
 
               <div className="editorial-block__visual editorial-block__visual--gallery">
-                <div className="mockup-gallery">
+                <div className="mockup-gallery nx-tilt-element" ref={galleryTiltRef}>
                   <div className="mockup-gallery__tile mockup-gallery__tile--main">
                     <span className="mockup-gallery__tag">Composição 3D / Premium</span>
                   </div>
@@ -572,7 +505,7 @@ function ServicesSection() {
               </div>
 
               <div className="editorial-block__visual editorial-block__visual--social-feed">
-                <div className="mockup-feed">
+                <div className="mockup-feed nx-tilt-element" ref={feedTiltRef}>
                   <div className="mockup-feed__post">
                     <div className="mockup-feed__post-header">
                       <span className="mockup-feed__avatar" />
@@ -615,14 +548,14 @@ function WhyNexoraSection() {
         <div className="positioning-editorial">
           {/* Coluna Esquerda: Declaração Principal */}
           <div className="positioning-statement">
-            <span className="positioning-tag">POSICIONAMENTO NEXORA</span>
-            <h2 id="positioning-title" className="positioning-headline">
+            <span className="positioning-tag reveal-elem" style={{ animationDelay: "100ms" }}>POSICIONAMENTO NEXORA</span>
+            <h2 id="positioning-title" className="positioning-headline reveal-elem" style={{ animationDelay: "200ms" }}>
               Seu negócio não precisa de mais complexidade.
               <span className="positioning-headline__accent">
                 Precisa da solução certa.
               </span>
             </h2>
-            <p className="positioning-lead">
+            <p className="positioning-lead reveal-elem" style={{ animationDelay: "320ms" }}>
               A maioria das empresas se perde entre ferramentas confusas e promessas vazias. 
               Na NEXORA, aliamos rigor estético, tecnologia sólida e visão comercial prática para entregar aquilo que realmente gera tração.
             </p>
@@ -636,7 +569,7 @@ function WhyNexoraSection() {
           </div>
 
           {/* Coluna Direita: 3 Pilares Fundamentais */}
-          <div className="positioning-pillars">
+          <div className="positioning-pillars reveal-elem" style={{ animationDelay: "400ms" }}>
             <article className="pillar-item">
               <div className="pillar-item__number">01</div>
               <div className="pillar-item__content">
@@ -711,11 +644,11 @@ function ProcessSection() {
       aria-labelledby="method-headline"
     >
       <div className="method-section__shell">
-        <header className="method-header">
+        <header className="method-header reveal-elem" style={{ animationDelay: "150ms" }}>
           <div className="method-header__tag">MÉTODO CLARO &amp; TRANSPARENTE</div>
           <div className="method-header__split">
             <h2 id="method-headline" className="method-header__title">
-              Do diagnóstico à entrega <em>definitiva.</em>
+              Do diagnóstico à entrega <span className="text-shimmer">definitiva.</span>
             </h2>
             <p className="method-header__desc">
               Um fluxo horizontal limpo, sem reuniões desnecessárias ou processos lentos. Direto ao ponto, com precisão técnica e atenção aos detalhes.
@@ -724,7 +657,7 @@ function ProcessSection() {
         </header>
 
         {/* Linha Horizontal Desktop / Vertical Mobile */}
-        <div className="method-timeline" role="list">
+        <div className="method-timeline reveal-elem" role="list" style={{ animationDelay: "300ms" }}>
           <div className="method-timeline__axis" aria-hidden="true" />
           {methodSteps.map(({ step, name, subtitle, text }, index) => (
             <div className="method-step" role="listitem" key={step}>
@@ -792,7 +725,7 @@ function ContactSection() {
       aria-labelledby="cta-headline"
     >
       <div className="final-cta-section__shell">
-        <div className="final-cta-card">
+        <div className="final-cta-card reveal-elem" style={{ animationDelay: "200ms" }}>
           <div className="final-cta-card__glow" aria-hidden="true" />
 
           <div className="final-cta-grid">
@@ -800,7 +733,7 @@ function ContactSection() {
             <div className="final-cta-copy">
               <span className="final-cta-tag">INICIAR PARCERIA</span>
               <h2 id="cta-headline" className="final-cta-title">
-                Vamos construir isso <em>juntos.</em>
+                Vamos construir isso <span className="text-shimmer">juntos.</span>
               </h2>
               <p className="final-cta-desc">
                 Conte o que sua empresa precisa hoje. Vamos entender seu objetivo de negócio e apresentar a solução visual e tecnológica definitiva.

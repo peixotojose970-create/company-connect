@@ -1998,3 +1998,247 @@ svg {
     align-items: flex-start;
   }
 }
+
+/* ==========================================================================
+   Camada Visual Premium — 3D Monolith, Microinterações, Parallax & Shimmer
+   ========================================================================== */
+
+/* Canvas 3D Monolith Principal no Hero */
+.hero-artwork__monolith-wrapper {
+  position: absolute;
+  top: -85px;
+  right: -40px;
+  width: 320px;
+  height: 320px;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8))
+         drop-shadow(0 0 25px rgba(0, 229, 255, 0.25));
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-3d-monolith-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.hero-3d-monolith-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Transições Suaves Entre Grandes Seções */
+.nx-section-transition {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.nx-section-transition__line {
+  position: absolute;
+  width: 100%;
+  max-width: var(--shell-width);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(0, 229, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+}
+
+.nx-section-transition__glow {
+  position: absolute;
+  width: 380px;
+  height: 60px;
+  background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+  filter: blur(20px);
+}
+
+.nx-section-transition--subtle-beam .nx-section-transition__glow {
+  background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.12) 0%, transparent 65%);
+}
+
+.nx-section-transition--fine-divider .nx-section-transition__glow {
+  opacity: 0.5;
+}
+
+/* Microinteração 3D Tilt nos Mockups de Serviços */
+.nx-tilt-element {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Serviços: Hover de Portfólio Interativo */
+.editorial-block {
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-block:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 229, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 102, 255, 0.15);
+}
+
+.editorial-block:hover .mockup-browser,
+.editorial-block:hover .mockup-campaign,
+.editorial-block:hover .mockup-phone,
+.editorial-block:hover .mockup-gallery,
+.editorial-block:hover .mockup-feed {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 229, 255, 0.12);
+}
+
+.editorial-block:hover .editorial-block__cta,
+.editorial-block:hover .editorial-link {
+  color: var(--cyan);
+}
+
+.editorial-block:hover .editorial-block__category {
+  color: var(--cyan);
+  border-color: rgba(0, 229, 255, 0.4);
+}
+
+/* Text Shimmer Sutil em Destaques Azul/Ciano */
+.text-shimmer {
+  background: linear-gradient(
+    110deg,
+    var(--cyan) 0%,
+    #ffffff 45%,
+    var(--blue-bright) 70%,
+    var(--cyan) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes shineText {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* Sequência de Revelação no Scroll (Staggered Animation) */
+.reveal-block .reveal-elem {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-block.is-visible .reveal-elem {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Microinterações Premium nos Botões */
+.nx-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease;
+}
+
+.nx-btn:hover {
+  transform: translateY(-2px);
+}
+
+.nx-btn:active {
+  transform: scale(0.97) translateY(0);
+  transition-duration: 0.1s;
+}
+
+.nx-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+  pointer-events: none;
+}
+
+.nx-btn:hover::after {
+  left: 140%;
+}
+
+/* Respeito estrito a Acessibilidade e Preferência de Redução de Movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .text-shimmer {
+    background: none;
+    -webkit-text-fill-color: var(--cyan);
+    color: var(--cyan);
+    animation: none;
+  }
+
+  .reveal-block .reveal-elem,
+  .reveal-block {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Responsividade Mobile para 3D e Parallax */
+@media (max-width: 1080px) {
+  .hero-artwork__monolith-wrapper {
+    top: -60px;
+    right: 10px;
+    width: 240px;
+    height: 240px;
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-artwork__monolith-wrapper {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: 0 auto -20px auto;
+    width: 190px;
+    height: 190px;
+  }
+
+  .nx-section-transition {
+    height: 60px;
+  }
+}
