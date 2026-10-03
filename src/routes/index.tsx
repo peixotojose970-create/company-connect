@@ -57,6 +57,32 @@ const services = [
   },
 ] as const;
 
+const processSteps = [
+  {
+    number: "01",
+    title: "CONVERSA",
+    description: "Você nos conta o que sua empresa precisa.",
+  },
+  {
+    number: "02",
+    title: "ESTRATÉGIA",
+    description: "Analisamos o objetivo e definimos a melhor solução.",
+  },
+  {
+    number: "03",
+    title: "CRIAÇÃO",
+    description: "Nossa equipe desenvolve o projeto e ajusta os detalhes.",
+  },
+  {
+    number: "04",
+    title: "ENTREGA",
+    description: "Você recebe uma solução pronta para utilizar.",
+  },
+] as const;
+
+const whatsappContactUrl =
+  "https://wa.me/?text=Ol%C3%A1%2C%20NEXORA!%20Quero%20conversar%20sobre%20a%20minha%20empresa.";
+
 function NexoraLogo() {
   return (
     <span className="nexora-logo" aria-label="NEXORA">
@@ -292,10 +318,82 @@ function ServicesSection() {
           ))}
         </div>
 
-        <div className="services-cta" id="contato">
+        <div className="services-cta">
           <p>Tem uma ideia ou precisa melhorar a presença digital da sua empresa?</p>
           <a className="button button--primary" href="#contato">
             Falar com a NEXORA
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProcessSection() {
+  return (
+    <section
+      className="process-section"
+      id="como-funciona"
+      aria-labelledby="process-title"
+    >
+      <div className="process-section__inner">
+        <div className="process-section__heading">
+          <div>
+            <p className="section-eyebrow">
+              <span aria-hidden="true" />
+              COMO FUNCIONA
+            </p>
+            <h2 id="process-title">
+              Do problema à <em>solução.</em>
+            </h2>
+          </div>
+
+          <p className="process-section__intro">
+            Entendemos o que sua empresa precisa, planejamos a solução e
+            colocamos tudo para funcionar.
+          </p>
+        </div>
+
+        <div className="process-flow" aria-label="Etapas do processo">
+          {processSteps.map(({ number, title, description }) => (
+            <article className="process-step" key={number}>
+              <div className="process-step__signal" aria-hidden="true">
+                <span className="process-step__node">{number}</span>
+                <span className="process-step__connector" />
+              </div>
+              <div className="process-step__content">
+                <p className="process-step__label">
+                  <span>{number}</span> — {title}
+                </p>
+                <p className="process-step__description">{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="needs-highlight" id="contato">
+          <div className="needs-highlight__copy">
+            <p className="section-eyebrow">
+              <span aria-hidden="true" />
+              SOBRE SUA EMPRESA
+            </p>
+            <h2>Cada empresa tem uma necessidade diferente.</h2>
+            <p>
+              Por isso, não trabalhamos com uma solução única para todos.
+              Primeiro entendemos o cenário da sua empresa. Depois definimos o
+              que realmente faz sentido.
+            </p>
+          </div>
+
+          <a
+            className="button button--primary needs-highlight__cta"
+            href={whatsappContactUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Conversar com a NEXORA pelo WhatsApp"
+          >
+            Vamos conversar sobre sua empresa
             <ArrowUpRight size={17} aria-hidden="true" />
           </a>
         </div>
@@ -346,7 +444,7 @@ function Index() {
             </p>
           </div>
 
-          <div className="hero__visual" id="como-funciona">
+          <div className="hero__visual">
             <GrowthComposition />
           </div>
         </div>
@@ -360,6 +458,7 @@ function Index() {
       </section>
 
       <ServicesSection />
+      <ProcessSection />
     </main>
   );
 }
