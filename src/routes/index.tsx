@@ -9,13 +9,13 @@ import {
   X,
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 const navigationItems = [
   { label: "Início", href: "#inicio" },
   { label: "Serviços", href: "#servicos" },
+  { label: "Por que a NEXORA?", href: "#por-que-nexora" },
   { label: "Como funciona", href: "#como-funciona" },
-  { label: "Sobre nós", href: "#sobre" },
   { label: "Contato", href: "#contato" },
 ] as const;
 
@@ -77,6 +77,33 @@ const processSteps = [
     number: "04",
     title: "ENTREGA",
     description: "Você recebe uma solução pronta para utilizar.",
+  },
+] as const;
+
+const whyNexoraBlocks = [
+  {
+    number: "01",
+    title: "PENSADO PARA O SEU NEGÓCIO",
+    description:
+      "Cada empresa possui uma necessidade diferente. Entendemos o seu objetivo antes de definir a solução.",
+  },
+  {
+    number: "02",
+    title: "TECNOLOGIA + CRIATIVIDADE",
+    description:
+      "Unimos tecnologia, inteligência artificial e criatividade para desenvolver soluções modernas e funcionais.",
+  },
+  {
+    number: "03",
+    title: "SIMPLES E DIRETO",
+    description:
+      "Sem processos complicados. Nossa proposta é entender o problema, criar a solução e entregar de forma clara.",
+  },
+  {
+    number: "04",
+    title: "FOCO NO RESULTADO",
+    description:
+      "Cada projeto é desenvolvido com um objetivo definido, buscando melhorar a presença digital e a comunicação da empresa.",
   },
 ] as const;
 
@@ -330,6 +357,89 @@ function ServicesSection() {
   );
 }
 
+function WhyNexoraSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      section.classList.add("why-section--visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("why-section--visible");
+        observer.disconnect();
+      },
+      { threshold: 0.14 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      className="why-section"
+      id="por-que-nexora"
+      ref={sectionRef}
+      aria-labelledby="why-nexora-title"
+    >
+      <div className="why-section__inner">
+        <div className="why-section__heading why-section__reveal">
+          <div>
+            <p className="section-eyebrow">
+              <span aria-hidden="true" />
+              POR QUE A NEXORA?
+            </p>
+            <h2 id="why-nexora-title">Por que a NEXORA?</h2>
+          </div>
+          <p className="why-section__intro">
+            Não queremos apenas criar algo bonito. Queremos criar soluções
+            digitais que façam sentido para o seu negócio.
+          </p>
+        </div>
+
+        <div className="why-grid">
+          {whyNexoraBlocks.map(({ number, title, description }, index) => (
+            <article
+              className="why-card why-section__reveal"
+              key={number}
+              style={
+                { "--why-delay": `${index * 90}ms` } as CSSProperties
+              }
+            >
+              <div className="why-card__top">
+                <span className="why-card__number">{number}</span>
+                <span className="why-card__signal" aria-hidden="true" />
+              </div>
+              <div className="why-card__content">
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="why-highlight why-section__reveal">
+          <strong>
+            Seu negócio não precisa de mais complexidade.
+            <span>Precisa da solução certa.</span>
+          </strong>
+          <a className="button button--primary why-highlight__cta" href="#servicos">
+            Conhecer nossos serviços
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ProcessSection() {
   return (
     <section
@@ -419,7 +529,7 @@ function Index() {
               Inteligência que faz empresas <em>crescerem.</em>
             </h1>
 
-            <p className="hero__subtitle" id="sobre">
+            <p className="hero__subtitle">
               Criamos soluções digitais para empresas que querem melhorar sua
               presença, sua comunicação e sua forma de vender.
             </p>
@@ -458,6 +568,7 @@ function Index() {
       </section>
 
       <ServicesSection />
+      <WhyNexoraSection />
       <ProcessSection />
     </main>
   );
