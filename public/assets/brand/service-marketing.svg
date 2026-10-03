@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mktGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0d15" />
+      <stop offset="100%" stop-color="#030508" />
+    </linearGradient>
+    <radialGradient id="mktBlueAura" cx="75%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#0066ff" stop-opacity="0.26" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#mktGrad)" />
+  <circle cx="860" cy="240" r="420" fill="url(#mktBlueAura)" />
+
+  <g transform="translate(80, 60)">
+    <!-- Primary Presentation Deck Plate -->
+    <rect width="620" height="680" rx="18" fill="#0d121c" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2" />
+
+    <g transform="translate(44, 44)">
+      <!-- Deck Cover -->
+      <rect width="532" height="360" rx="12" fill="#141c2c" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="32" y="52" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#00e5ff" letter-spacing="2">APRESENTAÇÃO INSTITUCIONAL</text>
+      <text x="32" y="96" font-family="'Space Grotesk', system-ui, sans-serif" font-size="30" font-weight="700" fill="#ffffff">Apresente sua empresa</text>
+      <text x="32" y="132" font-family="'Space Grotesk', system-ui, sans-serif" font-size="30" font-weight="700" fill="#ffffff">com alto padrão.</text>
+      
+      <text x="32" y="176" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" fill="#8898ac">
+        Propostas comerciais, catálogos e materiais institucionais organizados.
+      </text>
+
+      <!-- Miniature Thumbnails inside Deck -->
+      <g transform="translate(32, 210)">
+        <rect width="140" height="110" rx="6" fill="#1d283e" />
+        <rect x="160" width="140" height="110" rx="6" fill="#1d283e" />
+        <rect x="320" width="140" height="110" rx="6" fill="#1d283e" />
+      </g>
+
+      <!-- Bottom Tag -->
+      <g transform="translate(0, 420)">
+        <text x="0" y="0" font-family="'Space Grotesk', system-ui, sans-serif" font-size="22" font-weight="700" fill="#ffffff">Comunicação Comercial Coerente</text>
+        <text x="0" y="26" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" fill="#8898ac">
+          Materiais impressos e digitais com a mesma assinatura visual de excelência.
+        </text>
+      </g>
+    </g>
+
+    <!-- Side Collateral Cards -->
+    <g transform="translate(660, 20)">
+      <rect width="380" height="300" rx="14" fill="#0e1420" stroke="#ffffff" stroke-opacity="0.1" />
+      <g transform="translate(30, 30)">
+        <text x="0" y="20" font-family="'Space Grotesk', system-ui, sans-serif" font-size="18" font-weight="700" fill="#ffffff">Flyers &amp; Anúncios Digitais</text>
+        <text x="0" y="44" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" fill="#8898ac">Peças direcionadas para campanhas diárias e WhatsApp.</text>
+        <rect y="70" width="320" height="160" rx="8" fill="#172234" />
+      </g>
+
+      <g transform="translate(0, 340)">
+        <rect width="380" height="320" rx="14" fill="#0e1420" stroke="#ffffff" stroke-opacity="0.1" />
+        <g transform="translate(30, 30)">
+          <text x="0" y="20" font-family="'Space Grotesk', system-ui, sans-serif" font-size="18" font-weight="700" fill="#00e5ff">Catálogo Digital Interativo</text>
+          <text x="0" y="44" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" fill="#8898ac">Envio fácil em PDF ou visualização direta no smartphone.</text>
+          <rect y="70" width="320" height="180" rx="8" fill="#172234" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

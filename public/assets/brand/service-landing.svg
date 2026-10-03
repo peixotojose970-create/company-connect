@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f17" />
+      <stop offset="100%" stop-color="#030508" />
+    </linearGradient>
+    <radialGradient id="lpGlow" cx="65%" cy="35%" r="50%">
+      <stop offset="0%" stop-color="#0066ff" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#lpGrad)" />
+  <circle cx="780" cy="280" r="440" fill="url(#lpGlow)" />
+
+  <g transform="translate(80, 60)">
+    <rect width="1040" height="680" rx="18" fill="#070a10" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2" />
+
+    <!-- Top window -->
+    <rect width="1040" height="48" rx="18" fill="#0d121c" />
+    <circle cx="30" cy="24" r="5" fill="#ffffff" fill-opacity="0.25" />
+    <circle cx="48" cy="24" r="5" fill="#ffffff" fill-opacity="0.12" />
+    <circle cx="66" cy="24" r="5" fill="#ffffff" fill-opacity="0.12" />
+
+    <g transform="translate(60, 90)">
+      <rect width="130" height="24" rx="12" fill="#00e5ff" fill-opacity="0.12" stroke="#00e5ff" stroke-width="1" />
+      <text x="14" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10" font-weight="700" fill="#00e5ff" letter-spacing="1.5">FOCO EM CONVERSÃO</text>
+
+      <text x="0" y="66" font-family="'Space Grotesk', system-ui, sans-serif" font-size="38" font-weight="700" fill="#ffffff" letter-spacing="-1.5">Páginas que geram</text>
+      <text x="0" y="112" font-family="'Space Grotesk', system-ui, sans-serif" font-size="38" font-weight="700" fill="#00e5ff" letter-spacing="-1.5">contatos reais.</text>
+      
+      <text x="0" y="160" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="15" fill="#8898ac">
+        Comunicação clara e proposta de valor direta para campanhas e captação de clientes.
+      </text>
+
+      <!-- Conversion Form Mockup -->
+      <g transform="translate(0, 200)">
+        <rect width="440" height="220" rx="14" fill="#0d131e" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+        <text x="24" y="38" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Receber Proposta Comercial</text>
+        
+        <rect x="24" y="60" width="392" height="46" rx="8" fill="#06090e" stroke="#ffffff" stroke-opacity="0.1" />
+        <text x="44" y="88" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" fill="#66778f">contato@suaempresa.com.br</text>
+
+        <rect x="24" y="122" width="392" height="50" rx="8" fill="#0066ff" />
+        <text x="145" y="153" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" font-weight="600" fill="#ffffff">Solicitar Proposta</text>
+      </g>
+
+      <!-- Right Side Visual Offer Card -->
+      <g transform="translate(540, 0)">
+        <rect width="380" height="450" rx="16" fill="#0c111a" stroke="#ffffff" stroke-opacity="0.1" />
+        <rect x="24" y="24" width="332" height="200" rx="10" fill="#131b29" />
+        <circle cx="190" cy="124" r="30" fill="#0066ff" fill-opacity="0.3" stroke="#00e5ff" stroke-width="1.5" />
+        
+        <g transform="translate(24, 250)">
+          <rect width="332" height="74" rx="10" fill="#070a10" stroke="#00e5ff" stroke-opacity="0.3" />
+          <text x="20" y="30" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="700" fill="#00e5ff">Alta Conversão</text>
+          <text x="20" y="52" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#8899af">Copywriting persuasivo e jornada sem ruído</text>
+        </g>
+
+        <g transform="translate(24, 340)">
+          <rect width="332" height="74" rx="10" fill="#070a10" stroke="#ffffff" stroke-opacity="0.08" />
+          <text x="20" y="30" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Carregamento Rápido</text>
+          <text x="20" y="52" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#8899af">Otimização máxima de performance mobile</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="heroDarkBg" cx="60%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#0b111c" />
+      <stop offset="50%" stop-color="#05070c" />
+      <stop offset="100%" stop-color="#020306" />
+    </radialGradient>
+    <radialGradient id="auroraGlow" cx="65%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#0066ff" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#00e5ff" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="editorialBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.06" />
+      <stop offset="80%" stop-color="#0066ff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.4" />
+    </linearGradient>
+    <filter id="elevateShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="32" stdDeviation="40" flood-color="#000000" flood-opacity="0.75" />
+    </filter>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#heroDarkBg)" />
+  <circle cx="1020" cy="460" r="540" fill="url(#auroraGlow)" />
+
+  <!-- Subtle Editorial Framing Lines (Classic studio grid, breathing space) -->
+  <g opacity="0.16" stroke="#ffffff" stroke-width="1">
+    <line x1="80" y1="100" x2="1520" y2="100" />
+    <line x1="80" y1="1000" x2="1520" y2="1000" />
+    <line x1="160" y1="60" x2="160" y2="1040" stroke-dasharray="3 6" />
+    <line x1="1440" y1="60" x2="1440" y2="1040" stroke-dasharray="3 6" />
+  </g>
+
+  <!-- Large Editorial Showcase Viewport -->
+  <g transform="translate(160, 140)" filter="url(#elevateShadow)">
+    <rect width="1280" height="800" rx="20" fill="#070a10" stroke="url(#editorialBorder)" stroke-width="1.2" />
+
+    <!-- Window top bar -->
+    <rect width="1280" height="52" rx="20" fill="#0d121c" />
+    <circle cx="36" cy="26" r="5" fill="#ffffff" fill-opacity="0.25" />
+    <circle cx="54" cy="26" r="5" fill="#ffffff" fill-opacity="0.14" />
+    <circle cx="72" cy="26" r="5" fill="#ffffff" fill-opacity="0.14" />
+    <rect x="520" y="16" width="240" height="20" rx="10" fill="#040609" stroke="#ffffff" stroke-opacity="0.08" />
+
+    <!-- Split Editorial Layout -->
+    <g transform="translate(70, 90)">
+      <!-- Left Column: Agency / Studio Portfolio Presentation -->
+      <g transform="translate(0, 50)">
+        <text x="0" y="0" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" font-weight="700" fill="#00e5ff" letter-spacing="3">DIGITAL STUDIO &amp; BRANDING</text>
+        <text x="0" y="56" font-family="'Space Grotesk', system-ui, sans-serif" font-size="44" font-weight="700" fill="#ffffff" letter-spacing="-1.5">Presença digital</text>
+        <text x="0" y="112" font-family="'Space Grotesk', system-ui, sans-serif" font-size="44" font-weight="700" fill="#ffffff" letter-spacing="-1.5">feita com propósito.</text>
+        
+        <text x="0" y="174" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" fill="#8e9db3" letter-spacing="0">
+          Projetamos experiências digitais sob medida para empresas
+        </text>
+        <text x="0" y="202" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" fill="#8e9db3" letter-spacing="0">
+          que valorizam credibilidade, clareza e autoridade.
+        </text>
+
+        <!-- Signature Editorial Buttons -->
+        <g transform="translate(0, 260)">
+          <rect width="186" height="52" rx="26" fill="#0066ff" />
+          <text x="42" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" font-weight="600" fill="#ffffff">Ver Soluções</text>
+          <path d="M142 26l-4-4m4 4l-4 4m4-4h-14" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" />
+
+          <rect x="206" y="0" width="186" height="52" rx="26" fill="none" stroke="#ffffff" stroke-opacity="0.22" />
+          <text x="250" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" font-weight="500" fill="#d2ddeb">Fale Conosco</text>
+        </g>
+      </g>
+
+      <!-- Right Column: Monolith & Design Artifact -->
+      <g transform="translate(640, 20)">
+        <rect width="500" height="580" rx="16" fill="#0b1019" stroke="#ffffff" stroke-opacity="0.08" />
+        
+        <!-- Architectural Composition -->
+        <g transform="translate(130, 90)">
+          <polygon points="120,20 240,90 240,310 120,240" fill="#111927" stroke="#ffffff" stroke-opacity="0.18" />
+          <polygon points="0,90 120,20 120,240 0,310" fill="#1b283f" stroke="#ffffff" stroke-opacity="0.38" />
+          <polygon points="0,90 120,20 240,90 120,160" fill="#2d4265" stroke="#ffffff" stroke-opacity="0.65" />
+          <!-- Signature NEXORA Cyan highlight edge -->
+          <line x1="120" y1="20" x2="120" y2="240" stroke="#00e5ff" stroke-width="2.6" />
+          <circle cx="120" cy="20" r="4" fill="#ffffff" />
+        </g>
+
+        <!-- Floating Caption Bar -->
+        <g transform="translate(40, 460)">
+          <rect width="420" height="84" rx="12" fill="#05080e" stroke="#ffffff" stroke-opacity="0.12" />
+          <text x="32" y="36" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#00e5ff" letter-spacing="2">NEXORA DESIGN SYSTEM</text>
+          <text x="32" y="60" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Elegância, clareza e autoridade de marca</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

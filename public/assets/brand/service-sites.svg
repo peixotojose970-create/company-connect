@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="siteBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e16" />
+      <stop offset="100%" stop-color="#030508" />
+    </linearGradient>
+    <radialGradient id="siteBlue" cx="70%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#0066ff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#siteBgGrad)" />
+  <circle cx="840" cy="240" r="420" fill="url(#siteBlue)" />
+
+  <g transform="translate(80, 60)">
+    <!-- Device Frame -->
+    <rect width="1040" height="680" rx="16" fill="#070a10" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2" />
+    
+    <!-- Browser Navigation -->
+    <rect width="1040" height="48" rx="16" fill="#0e131d" />
+    <circle cx="30" cy="24" r="5" fill="#ffffff" fill-opacity="0.25" />
+    <circle cx="48" cy="24" r="5" fill="#ffffff" fill-opacity="0.12" />
+    <circle cx="66" cy="24" r="5" fill="#ffffff" fill-opacity="0.12" />
+    <rect x="400" y="14" width="240" height="20" rx="10" fill="#05070c" />
+    <text x="440" y="28" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" fill="#66788f">suaempresa.com.br</text>
+
+    <!-- Inside Page Experience: Clean Corporate Site -->
+    <g transform="translate(60, 90)">
+      <text x="0" y="0" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#00e5ff" letter-spacing="2">WEBSITE CORPORATIVO</text>
+      <text x="0" y="44" font-family="'Space Grotesk', system-ui, sans-serif" font-size="36" font-weight="700" fill="#ffffff" letter-spacing="-1">Sua empresa com</text>
+      <text x="0" y="86" font-family="'Space Grotesk', system-ui, sans-serif" font-size="36" font-weight="700" fill="#ffffff" letter-spacing="-1">presença profissional.</text>
+      
+      <text x="0" y="132" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" fill="#8898ac">
+        Arquitetura limpa, navegação fluida e excelente apresentação comercial.
+      </text>
+
+      <g transform="translate(0, 164)">
+        <rect width="150" height="42" rx="21" fill="#0066ff" />
+        <text x="32" y="26" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Ver Demonstração</text>
+      </g>
+
+      <!-- Side Editorial Grid Preview inside site -->
+      <g transform="translate(540, -10)">
+        <rect width="380" height="460" rx="14" fill="#0c111a" stroke="#ffffff" stroke-opacity="0.1" />
+        <rect x="24" y="24" width="332" height="210" rx="8" fill="#141c2b" />
+        <circle cx="190" cy="129" r="32" fill="#0066ff" fill-opacity="0.3" stroke="#00e5ff" stroke-width="1.5" />
+        <text x="24" y="272" font-family="'Space Grotesk', system-ui, sans-serif" font-size="18" font-weight="600" fill="#ffffff">Design &amp; Performance</text>
+        <text x="24" y="298" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" fill="#75869c">Otimizado para converter e passar solidez institucional.</text>
+        
+        <rect x="24" y="340" width="332" height="44" rx="8" fill="#06080e" stroke="#ffffff" stroke-opacity="0.06" />
+        <text x="44" y="367" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" font-weight="600" fill="#00e5ff">100% Responsivo e Rápido</text>
+      </g>
+    </g>
+  </g>
+</svg>

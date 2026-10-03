@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%">
+  <defs>
+    <linearGradient id="abCorpBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e15" />
+      <stop offset="60%" stop-color="#05070b" />
+      <stop offset="100%" stop-color="#020306" />
+    </linearGradient>
+    <radialGradient id="corpBlueGlow" cx="60%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#0066ff" stop-opacity="0.25" />
+      <stop offset="60%" stop-color="#00e5ff" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#abCorpBg)" />
+  <circle cx="700" cy="400" r="480" fill="url(#corpBlueGlow)" />
+
+  <g transform="translate(100, 80)">
+    <!-- Main Frame -->
+    <rect width="1000" height="740" rx="20" fill="#080c13" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2" />
+
+    <g transform="translate(60, 60)">
+      <!-- Corporate Header -->
+      <line x1="0" y1="0" x2="880" y2="0" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+      <text x="0" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" font-weight="700" fill="#00e5ff" letter-spacing="3">ESTRUTURA &amp; MÉTODO NEXORA</text>
+      <text x="680" y="32" font-family="'Space Grotesk', system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff" fill-opacity="0.5">DESIGN + TECNOLOGIA</text>
+
+      <!-- Center Monolith Graphic Sculpture -->
+      <g transform="translate(240, 90)">
+        <polygon points="200,40 380,140 380,430 200,330" fill="#0e1724" stroke="#ffffff" stroke-opacity="0.2" />
+        <polygon points="20,140 200,40 200,330 20,430" fill="#1b283d" stroke="#ffffff" stroke-opacity="0.4" />
+        <polygon points="20,140 200,40 380,140 200,240" fill="#2d4263" stroke="#ffffff" stroke-opacity="0.65" />
+        <line x1="200" y1="40" x2="200" y2="330" stroke="#00e5ff" stroke-width="2.5" />
+        <circle cx="200" cy="40" r="4" fill="#ffffff" />
+      </g>
+
+      <!-- 3 Key Corporate Pillars Grid -->
+      <g transform="translate(40, 520)">
+        <rect width="240" height="110" rx="10" fill="#0d121c" stroke="#ffffff" stroke-opacity="0.08" />
+        <text x="24" y="36" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#0066ff" letter-spacing="1.5">CLAREZA</text>
+        <text x="24" y="62" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Direto ao Ponto</text>
+        <text x="24" y="86" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#7a8b9f">Sem termos vazios ou ruído</text>
+
+        <g transform="translate(280, 0)">
+          <rect width="240" height="110" rx="10" fill="#0d121c" stroke="#ffffff" stroke-opacity="0.08" />
+          <text x="24" y="36" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#00e5ff" letter-spacing="1.5">ESTRATÉGIA</text>
+          <text x="24" y="62" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Foco no Negócio</text>
+          <text x="24" y="86" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#7a8b9f">Cada entrega tem um objetivo</text>
+        </g>
+
+        <g transform="translate(560, 0)">
+          <rect width="240" height="110" rx="10" fill="#0d121c" stroke="#ffffff" stroke-opacity="0.08" />
+          <text x="24" y="36" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="1.5">QUALIDADE</text>
+          <text x="24" y="62" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Padrão Premium</text>
+          <text x="24" y="86" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#7a8b9f">Rigor estético e técnico</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

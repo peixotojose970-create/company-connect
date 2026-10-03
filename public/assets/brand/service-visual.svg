@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="visGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e16" />
+      <stop offset="100%" stop-color="#020305" />
+    </linearGradient>
+    <linearGradient id="artPosterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066ff" />
+      <stop offset="100%" stop-color="#00e5ff" />
+    </linearGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#visGrad)" />
+
+  <g transform="translate(80, 60)">
+    <!-- Main Focus Art Frame -->
+    <rect width="640" height="680" rx="16" fill="#0c111a" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2" />
+
+    <g transform="translate(44, 44)">
+      <!-- Main Visual Showcase -->
+      <rect width="552" height="420" rx="12" fill="#121824" stroke="#ffffff" stroke-opacity="0.08" />
+      
+      <!-- Minimalist Graphic Studio Direction -->
+      <circle cx="276" cy="210" r="130" fill="none" stroke="url(#artPosterGrad)" stroke-width="3" />
+      <circle cx="276" cy="210" r="70" fill="#0066ff" fill-opacity="0.25" stroke="#00e5ff" stroke-width="1.5" />
+      <line x1="100" y1="210" x2="452" y2="210" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1" />
+      <line x1="276" y1="50" x2="276" y2="370" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1" />
+
+      <!-- Typography Caption below frame -->
+      <g transform="translate(0, 460)">
+        <text x="0" y="0" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#00e5ff" letter-spacing="2">DIREÇÃO DE ARTE &amp; CONTEÚDO</text>
+        <text x="0" y="32" font-family="'Space Grotesk', system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Identidade de Marca &amp; Produto</text>
+        <text x="0" y="58" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" fill="#8898ac">Produção visual consistente para produtos, catálogos e redes sociais.</text>
+      </g>
+    </g>
+
+    <!-- Side Collateral Mockups (Social & Banner) -->
+    <g transform="translate(680, 20)">
+      <!-- Top Social Square -->
+      <rect width="360" height="290" rx="14" fill="#0f1522" stroke="#ffffff" stroke-opacity="0.1" />
+      <g transform="translate(30, 30)">
+        <rect width="300" height="160" rx="8" fill="#162032" />
+        <circle cx="150" cy="80" r="28" fill="#0066ff" fill-opacity="0.4" stroke="#00e5ff" stroke-width="1.2" />
+        <text x="0" y="196" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Posts e Campanhas</text>
+        <text x="0" y="218" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#7a8ba0">Estética alinhada à autoridade do negócio</text>
+      </g>
+
+      <!-- Bottom Promotional Banner -->
+      <g transform="translate(0, 330)">
+        <rect width="360" height="330" rx="14" fill="#0f1522" stroke="#ffffff" stroke-opacity="0.1" />
+        <g transform="translate(30, 30)">
+          <rect width="300" height="190" rx="8" fill="url(#artPosterGrad)" fill-opacity="0.25" stroke="#00e5ff" stroke-width="1.2" />
+          <text x="20" y="105" font-family="'Space Grotesk', system-ui, sans-serif" font-size="18" font-weight="700" fill="#ffffff">Visual Premium</text>
+          <text x="0" y="232" font-family="'Space Grotesk', system-ui, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Materiais de Divulgação</text>
+          <text x="0" y="254" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" fill="#7a8ba0">Apresentações, banners e anúncios</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
