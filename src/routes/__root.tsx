@@ -78,10 +78,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Oi em movimento" },
-      { name: "description", content: "Uma página com botões oi animados." },
-      { property: "og:title", content: "Oi em movimento" },
-      { property: "og:description", content: "Uma página com botões oi animados." },
+      { title: "NEXORA — Inteligência que faz empresas crescerem." },
+      {
+        name: "description",
+        content:
+          "Soluções digitais para melhorar a presença, a comunicação e a forma de vender da sua empresa.",
+      },
+      {
+        property: "og:title",
+        content: "NEXORA — Inteligência que faz empresas crescerem.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Soluções digitais para melhorar a presença, a comunicação e a forma de vender da sua empresa.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -99,7 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap",
       },
     ],
   }),

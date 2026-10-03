@@ -1,4 +1,5 @@
 import {
+  ArrowDown,
   ArrowUpRight,
   Instagram,
   Image,
@@ -12,13 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type FormEvent,
-} from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 const navigationItems = [
   { label: "Início", href: "#inicio" },
@@ -35,6 +30,7 @@ const services = [
     title: "CRIAÇÃO DE SITES",
     description:
       "Sites modernos, rápidos e responsivos para apresentar sua empresa e transformar visitantes em clientes.",
+    signal: "PRESENÇA / EXPERIÊNCIA",
   },
   {
     number: "02",
@@ -42,6 +38,7 @@ const services = [
     title: "LANDING PAGES",
     description:
       "Páginas focadas em uma oferta, produto ou serviço, pensadas para gerar contatos e conversões.",
+    signal: "FOCO / CONVERSÃO",
   },
   {
     number: "03",
@@ -49,6 +46,7 @@ const services = [
     title: "CARDÁPIOS DIGITAIS",
     description:
       "Cardápios digitais modernos, organizados e fáceis de acessar pelo celular.",
+    signal: "ACESSO / MOBILE",
   },
   {
     number: "04",
@@ -56,6 +54,7 @@ const services = [
     title: "IMAGENS E CONTEÚDO VISUAL",
     description:
       "Artes e imagens profissionais para divulgar produtos, serviços, promoções e sua marca.",
+    signal: "IMAGEM / IDENTIDADE",
   },
   {
     number: "05",
@@ -63,6 +62,7 @@ const services = [
     title: "MATERIAIS DE DIVULGAÇÃO",
     description:
       "Materiais digitais para Instagram, WhatsApp e outros canais de comunicação.",
+    signal: "COMUNICAÇÃO / ALCANCE",
   },
 ] as const;
 
@@ -145,6 +145,34 @@ function buildWhatsappUrl(message: string) {
   return `https://wa.me${recipientPath}?text=${encodeURIComponent(message)}`;
 }
 
+function useSectionReveal<T extends HTMLElement>() {
+  const sectionRef = useRef<T | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      section.classList.add("is-visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("is-visible");
+        observer.disconnect();
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  return sectionRef;
+}
+
 function NexoraLogo() {
   return (
     <span className="nexora-logo" aria-label="NEXORA">
@@ -164,12 +192,22 @@ function NexoraLogo() {
   );
 }
 
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <p className="section-label">
+      <span aria-hidden="true" />
+      <span>{children}</span>
+      <i aria-hidden="true" />
+    </p>
+  );
+}
+
 function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const updateHeader = () => setIsScrolled(window.scrollY > 24);
+    const updateHeader = () => setIsScrolled(window.scrollY > 32);
     updateHeader();
     window.addEventListener("scroll", updateHeader, { passive: true });
     return () => window.removeEventListener("scroll", updateHeader);
@@ -183,7 +221,11 @@ function SiteHeader() {
   }, [isMenuOpen]);
 
   return (
-    <header className={`site-header${isScrolled ? " site-header--scrolled" : ""}`}>
+    <header
+      className={`site-header${isScrolled ? " site-header--scrolled" : ""}${
+        isMenuOpen ? " site-header--menu-open" : ""
+      }`}
+    >
       <div className="site-header__inner">
         <a
           className="site-header__brand"
@@ -194,19 +236,17 @@ function SiteHeader() {
         </a>
 
         <nav className="desktop-nav" aria-label="Navegação principal">
-          {navigationItems.map((item, index) => (
-            <a
-              key={item.href}
-              className={index === 0 ? "is-active" : undefined}
-              href={item.href}
-            >
+          {navigationItems.map((item) => (
+            <a key={item.href} href={item.href}>
+              <span aria-hidden="true" />
               {item.label}
             </a>
           ))}
         </nav>
 
         <a className="header-cta" href="#contato">
-          Falar com a NEXORA
+          <span>Falar com a NEXORA</span>
+          <ArrowUpRight size={17} aria-hidden="true" />
         </a>
 
         <button
@@ -216,7 +256,7 @@ function SiteHeader() {
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen((open) => !open)}
         >
-          {isMenuOpen ? <X size={23} /> : <Menu size={23} />}
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -224,6 +264,8 @@ function SiteHeader() {
         className={`mobile-menu${isMenuOpen ? " mobile-menu--open" : ""}`}
         aria-hidden={!isMenuOpen}
       >
+        <div className="mobile-menu__grid" aria-hidden="true" />
+        <p className="mobile-menu__meta">NEXORA / NAVEGAÇÃO</p>
         <nav aria-label="Navegação móvel">
           {navigationItems.map((item, index) => (
             <a
@@ -242,149 +284,263 @@ function SiteHeader() {
           onClick={() => setIsMenuOpen(false)}
         >
           Falar com a NEXORA
+          <ArrowUpRight size={18} aria-hidden="true" />
         </a>
       </div>
     </header>
   );
 }
 
-function GrowthComposition() {
+function HeroVisual() {
   return (
     <div
-      className="growth-composition"
+      className="hero-visual"
       role="img"
-      aria-label="Composição abstrata ligando presença digital, inteligência e crescimento"
+      aria-label="Composição tecnológica abstrata representando presença, inteligência e crescimento"
     >
-      <div className="growth-composition__grid" aria-hidden="true" />
+      <div className="hero-visual__grid" aria-hidden="true" />
+      <div className="hero-visual__halo" aria-hidden="true" />
 
-      <svg
-        className="growth-composition__svg"
-        viewBox="0 0 640 640"
-        aria-hidden="true"
-      >
-        <g className="composition-rings">
-          <circle cx="332" cy="316" r="182" />
-          <circle cx="332" cy="316" r="116" />
-          <circle cx="332" cy="316" r="54" />
-        </g>
-
-        <g className="composition-orbits">
-          <ellipse cx="332" cy="316" rx="245" ry="104" />
+      <svg className="hero-visual__svg" viewBox="0 0 680 680" aria-hidden="true">
+        <defs>
+          <linearGradient id="signalGradient" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0875ff" />
+            <stop offset="100%" stopColor="#25e6ff" />
+          </linearGradient>
+          <radialGradient id="coreGradient">
+            <stop offset="0%" stopColor="#25e6ff" stopOpacity="0.9" />
+            <stop offset="44%" stopColor="#0875ff" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#05070c" stopOpacity="0" />
+          </radialGradient>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <circle
+          cx="344"
+          cy="334"
+          r="246"
+          fill="url(#coreGradient)"
+          opacity="0.32"
+        />
+        <g className="hero-visual__orbits">
+          <circle cx="344" cy="334" r="210" />
+          <circle cx="344" cy="334" r="156" />
+          <circle cx="344" cy="334" r="96" />
           <ellipse
-            cx="332"
-            cy="316"
-            rx="230"
-            ry="92"
-            transform="rotate(-54 332 316)"
+            cx="344"
+            cy="334"
+            rx="276"
+            ry="118"
+            transform="rotate(-28 344 334)"
+          />
+          <ellipse
+            cx="344"
+            cy="334"
+            rx="258"
+            ry="94"
+            transform="rotate(54 344 334)"
           />
         </g>
-
-        <g className="composition-connections">
-          <path d="M96 468C176 450 207 394 257 367" />
-          <path d="M257 367L364 278L468 214L551 152" />
-          <path d="M257 367L318 441L438 475L538 447" />
-          <path d="M364 278L414 347L468 214" />
-          <path d="M318 441L414 347" />
+        <g className="hero-visual__pathways">
+          <path d="M52 512C144 472 176 414 244 376" />
+          <path d="M244 376L334 290L428 246L596 166" />
+          <path d="M244 376L320 464L454 494L608 444" />
+          <path d="M334 290L406 356L428 246" />
+          <path d="M320 464L406 356" />
         </g>
-
         <path
-          className="composition-growth-line"
-          d="M74 500C150 486 198 437 246 407C310 367 336 326 374 291C426 244 475 211 566 137"
+          className="hero-visual__signal"
+          d="M44 544C132 512 170 456 236 410C324 348 354 314 410 270C476 218 534 186 632 114"
         />
-
-        <g className="composition-nodes">
-          <circle cx="96" cy="468" r="7" />
-          <circle cx="257" cy="367" r="10" />
-          <circle cx="318" cy="441" r="7" />
-          <circle cx="364" cy="278" r="8" />
-          <circle cx="414" cy="347" r="7" />
-          <circle cx="468" cy="214" r="10" />
-          <circle cx="538" cy="447" r="7" />
-          <circle cx="566" cy="137" r="12" />
+        <g className="hero-visual__nodes">
+          <circle cx="52" cy="512" r="6" />
+          <circle cx="244" cy="376" r="11" />
+          <circle cx="334" cy="290" r="8" />
+          <circle cx="406" cy="356" r="7" />
+          <circle cx="428" cy="246" r="10" />
+          <circle cx="608" cy="444" r="7" />
+          <circle cx="632" cy="114" r="13" filter="url(#softGlow)" />
         </g>
-
-        <g className="composition-crosshairs">
-          <path d="M74 500h34M91 483v34" />
-          <path d="M549 137h34M566 120v34" />
-          <path d="M309 441h18M318 432v18" />
+        <g className="hero-visual__crosshairs">
+          <path d="M44 544h36M62 526v36" />
+          <path d="M614 114h36M632 96v36" />
+          <path d="M398 356h16M406 348v16" />
         </g>
       </svg>
 
-      <div className="composition-label composition-label--presence">
-        <span>01</span>
-        Presença digital
-      </div>
-      <div className="composition-label composition-label--intelligence">
-        <span>02</span>
-        Inteligência
-      </div>
-      <div className="composition-label composition-label--growth">
-        <span>03</span>
-        Crescimento
-      </div>
-      <div className="composition-core" aria-hidden="true">
+      <div className="hero-visual__core" aria-hidden="true">
         <span>N</span>
-        <small>NEXORA</small>
+        <small>INTELIGÊNCIA</small>
       </div>
-      <div className="composition-coordinate composition-coordinate--left">
-        DIGITAL / SIGNAL
+      <div className="hero-visual__tag hero-visual__tag--one">
+        <span>01</span>
+        PRESENÇA DIGITAL
       </div>
-      <div className="composition-coordinate composition-coordinate--right">
-        NEXORA / SYSTEM
+      <div className="hero-visual__tag hero-visual__tag--two">
+        <span>02</span>
+        INTELIGÊNCIA
+      </div>
+      <div className="hero-visual__tag hero-visual__tag--three">
+        <span>03</span>
+        CRESCIMENTO
+      </div>
+      <div className="hero-visual__coordinate hero-visual__coordinate--left">
+        SIGNAL / NX-01
+      </div>
+      <div className="hero-visual__coordinate hero-visual__coordinate--right">
+        SYSTEM / ACTIVE
       </div>
     </div>
   );
 }
 
+function Hero() {
+  return (
+    <section className="hero" id="inicio" aria-labelledby="hero-title">
+      <div className="hero__grid" aria-hidden="true" />
+      <div className="hero__glow hero__glow--one" aria-hidden="true" />
+      <div className="hero__glow hero__glow--two" aria-hidden="true" />
+      <div className="hero__technical hero__technical--left" aria-hidden="true">
+        NX / 001
+      </div>
+      <div className="hero__technical hero__technical--right" aria-hidden="true">
+        DIGITAL SYSTEM
+      </div>
+
+      <div className="hero__inner">
+        <div className="hero__eyebrow">
+          <span aria-hidden="true" />
+          SERVIÇOS DIGITAIS PARA EMPRESAS
+          <i aria-hidden="true" />
+        </div>
+
+        <div className="hero__composition">
+          <div className="hero__visual-wrap">
+            <HeroVisual />
+          </div>
+
+          <div className="hero__copy">
+            <h1 id="hero-title">
+              Inteligência que faz
+              <span>
+                empresas <em>crescerem.</em>
+              </span>
+            </h1>
+
+            <div className="hero__support">
+              <p>
+                Criamos soluções digitais para empresas que querem melhorar sua
+                presença, sua comunicação e sua forma de vender.
+              </p>
+              <div className="hero__actions">
+                <a className="button button--primary" href="#servicos">
+                  Conhecer nossos serviços
+                  <ArrowUpRight size={18} aria-hidden="true" />
+                </a>
+                <a className="button button--secondary" href="#contato">
+                  Falar com a NEXORA
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero__footer">
+          <div className="hero__services">
+            <span>SITES</span>
+            <i aria-hidden="true">/</i>
+            <span>LANDING PAGES</span>
+            <i aria-hidden="true">/</i>
+            <span>CARDÁPIOS DIGITAIS</span>
+            <i aria-hidden="true">/</i>
+            <span>CONTEÚDO VISUAL</span>
+          </div>
+
+          <a className="scroll-cue" href="#servicos">
+            <span>CONTINUAR</span>
+            <i aria-hidden="true">
+              <ArrowDown size={15} />
+            </i>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ServicesSection() {
+  const sectionRef = useSectionReveal<HTMLElement>();
+
   return (
     <section
-      className="services-section"
+      className="services-section reveal-section"
       id="servicos"
+      ref={sectionRef}
       aria-labelledby="services-title"
     >
-      <div className="services-section__inner">
-        <div className="services-section__heading">
+      <div className="section-shell">
+        <div className="section-heading section-heading--split">
           <div>
-            <p className="section-eyebrow">
-              <span aria-hidden="true" />
-              SERVIÇOS
-            </p>
+            <SectionLabel>SERVIÇOS / 01</SectionLabel>
             <h2 id="services-title">
               Serviços que colocam sua empresa no <em>digital.</em>
             </h2>
           </div>
-
-          <p className="services-section__intro">
+          <p>
             Do primeiro contato com seu cliente até a apresentação da sua marca,
             criamos soluções digitais pensadas para tornar sua empresa mais
             profissional e mais fácil de encontrar.
           </p>
         </div>
 
-        <div className="services-grid">
-          {services.map(({ number, icon: Icon, title, description }) => (
-            <article className="service-item" key={title}>
-              <div className="service-item__top">
-                <span className="service-item__icon" aria-hidden="true">
-                  <Icon size={27} strokeWidth={1.5} />
-                </span>
-                <span className="service-item__number">{number}</span>
+        <div className="services-system">
+          {services.map(({ number, icon: Icon, title, description, signal }) => (
+            <article className="service-module" key={title}>
+              <div className="service-module__rail">
+                <span>{number}</span>
+                <i aria-hidden="true" />
               </div>
-              <div className="service-item__content">
+              <div className="service-module__visual" aria-hidden="true">
+                <span>
+                  <Icon size={34} strokeWidth={1.25} />
+                </span>
+                <svg viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="62" />
+                  <circle cx="80" cy="80" r="38" />
+                  <path d="M18 80h124M80 18v124" />
+                </svg>
+              </div>
+              <div className="service-module__content">
+                <p className="service-module__signal">{signal}</p>
                 <h3>{title}</h3>
                 <p>{description}</p>
               </div>
-              <span className="service-item__signal" aria-hidden="true" />
+              <a
+                className="service-module__action"
+                href="#contato"
+                aria-label={`Conversar sobre ${title}`}
+              >
+                <span>EXPLORAR</span>
+                <ArrowUpRight size={20} aria-hidden="true" />
+              </a>
             </article>
           ))}
         </div>
 
-        <div className="services-cta">
-          <p>Tem uma ideia ou precisa melhorar a presença digital da sua empresa?</p>
-          <a className="button button--primary" href="#contato">
+        <div className="services-outro">
+          <p>
+            Tem uma ideia ou precisa melhorar a presença digital da sua empresa?
+          </p>
+          <a className="text-link" href="#contato">
             Falar com a NEXORA
-            <ArrowUpRight size={17} aria-hidden="true" />
+            <span aria-hidden="true">
+              <ArrowUpRight size={18} />
+            </span>
           </a>
         </div>
       </div>
@@ -393,66 +549,42 @@ function ServicesSection() {
 }
 
 function WhyNexoraSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (!("IntersectionObserver" in window)) {
-      section.classList.add("why-section--visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        section.classList.add("why-section--visible");
-        observer.disconnect();
-      },
-      { threshold: 0.14 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
+  const sectionRef = useSectionReveal<HTMLElement>();
 
   return (
     <section
-      className="why-section"
+      className="why-section reveal-section"
       id="por-que-nexora"
       ref={sectionRef}
       aria-labelledby="why-nexora-title"
     >
-      <div className="why-section__inner">
-        <div className="why-section__heading why-section__reveal">
+      <div className="why-section__grid" aria-hidden="true" />
+      <div className="section-shell">
+        <div className="why-intro">
           <div>
-            <p className="section-eyebrow">
-              <span aria-hidden="true" />
-              POR QUE A NEXORA?
-            </p>
+            <SectionLabel>POR QUE A NEXORA? / 02</SectionLabel>
             <h2 id="why-nexora-title">Por que a NEXORA?</h2>
           </div>
-          <p className="why-section__intro">
+          <p>
             Não queremos apenas criar algo bonito. Queremos criar soluções
             digitais que façam sentido para o seu negócio.
           </p>
         </div>
 
-        <div className="why-grid">
+        <div className="why-manifest">
           {whyNexoraBlocks.map(({ number, title, description }, index) => (
             <article
-              className="why-card why-section__reveal"
+              className="manifest-item"
               key={number}
               style={
-                { "--why-delay": `${index * 90}ms` } as CSSProperties
+                { "--item-delay": `${index * 90}ms` } as React.CSSProperties
               }
             >
-              <div className="why-card__top">
-                <span className="why-card__number">{number}</span>
-                <span className="why-card__signal" aria-hidden="true" />
+              <div className="manifest-item__index" aria-hidden="true">
+                {number}
               </div>
-              <div className="why-card__content">
+              <div className="manifest-item__body">
+                <span className="manifest-item__signal" aria-hidden="true" />
                 <h3>{title}</h3>
                 <p>{description}</p>
               </div>
@@ -460,14 +592,19 @@ function WhyNexoraSection() {
           ))}
         </div>
 
-        <div className="why-highlight why-section__reveal">
+        <div className="why-statement">
+          <div className="why-statement__code" aria-hidden="true">
+            <span>NX</span>
+            <i />
+            <span>04</span>
+          </div>
           <strong>
             Seu negócio não precisa de mais complexidade.
             <span>Precisa da solução certa.</span>
           </strong>
-          <a className="button button--primary why-highlight__cta" href="#servicos">
+          <a className="button button--primary" href="#servicos">
             Conhecer nossos serviços
-            <ArrowUpRight size={17} aria-hidden="true" />
+            <ArrowUpRight size={18} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -476,53 +613,57 @@ function WhyNexoraSection() {
 }
 
 function ProcessSection() {
+  const sectionRef = useSectionReveal<HTMLElement>();
+
   return (
     <section
-      className="process-section"
+      className="process-section reveal-section"
       id="como-funciona"
+      ref={sectionRef}
       aria-labelledby="process-title"
     >
-      <div className="process-section__inner">
-        <div className="process-section__heading">
+      <div className="section-shell">
+        <div className="section-heading section-heading--split process-heading">
           <div>
-            <p className="section-eyebrow">
-              <span aria-hidden="true" />
-              COMO FUNCIONA
-            </p>
+            <SectionLabel>COMO FUNCIONA / 03</SectionLabel>
             <h2 id="process-title">
               Do problema à <em>solução.</em>
             </h2>
           </div>
-
-          <p className="process-section__intro">
+          <p>
             Entendemos o que sua empresa precisa, planejamos a solução e
             colocamos tudo para funcionar.
           </p>
         </div>
 
         <div className="process-flow" aria-label="Etapas do processo">
-          {processSteps.map(({ number, title, description }) => (
-            <article className="process-step" key={number}>
-              <div className="process-step__signal" aria-hidden="true">
-                <span className="process-step__node">{number}</span>
-                <span className="process-step__connector" />
+          <div className="process-flow__track" aria-hidden="true">
+            <span />
+          </div>
+          {processSteps.map(({ number, title, description }, index) => (
+            <article
+              className="process-node"
+              key={number}
+              style={
+                { "--node-delay": `${index * 120}ms` } as React.CSSProperties
+              }
+            >
+              <div className="process-node__marker" aria-hidden="true">
+                <span>{number}</span>
+                <i />
               </div>
-              <div className="process-step__content">
-                <p className="process-step__label">
-                  <span>{number}</span> — {title}
-                </p>
-                <p className="process-step__description">{description}</p>
+              <div className="process-node__content">
+                <p>ETAPA {number}</p>
+                <h3>{title}</h3>
+                <span>{description}</span>
               </div>
             </article>
           ))}
         </div>
 
-        <div className="needs-highlight">
-          <div className="needs-highlight__copy">
-            <p className="section-eyebrow">
-              <span aria-hidden="true" />
-              SOBRE SUA EMPRESA
-            </p>
+        <div className="process-aside">
+          <div className="process-aside__copy">
+            <SectionLabel>SOBRE SUA EMPRESA</SectionLabel>
             <h2>Cada empresa tem uma necessidade diferente.</h2>
             <p>
               Por isso, não trabalhamos com uma solução única para todos.
@@ -530,16 +671,15 @@ function ProcessSection() {
               que realmente faz sentido.
             </p>
           </div>
-
           <a
-            className="button button--primary needs-highlight__cta"
+            className="button button--primary"
             href={whatsappContactUrl}
             target="_blank"
             rel="noreferrer"
             aria-label="Conversar com a NEXORA pelo WhatsApp"
           >
             Vamos conversar sobre sua empresa
-            <ArrowUpRight size={17} aria-hidden="true" />
+            <ArrowUpRight size={18} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -548,29 +688,7 @@ function ProcessSection() {
 }
 
 function ContactSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (!("IntersectionObserver" in window)) {
-      section.classList.add("contact-section--visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        section.classList.add("contact-section--visible");
-        observer.disconnect();
-      },
-      { threshold: 0.12 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
+  const sectionRef = useSectionReveal<HTMLElement>();
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -592,59 +710,61 @@ function ContactSection() {
 
   return (
     <section
-      className="contact-section"
+      className="contact-section reveal-section"
       id="contato"
       ref={sectionRef}
       aria-labelledby="contact-title"
     >
-      <div className="contact-section__inner">
-        <div className="contact-section__copy contact-reveal">
-          <p className="section-eyebrow">
-            <span aria-hidden="true" />
-            CONTATO
-          </p>
+      <div className="contact-section__grid" aria-hidden="true" />
+      <div className="contact-section__orbit" aria-hidden="true" />
+      <div className="contact-section__beam" aria-hidden="true" />
+
+      <div className="section-shell contact-shell">
+        <div className="contact-copy">
+          <SectionLabel>CONTATO / 04</SectionLabel>
+          <div className="contact-copy__meta" aria-hidden="true">
+            <span>INICIAR PROJETO</span>
+            <i />
+            <span>NEXORA</span>
+          </div>
           <h2 id="contact-title">
             Vamos transformar sua próxima ideia em <em>realidade?</em>
           </h2>
-          <p className="contact-section__intro">
+          <p>
             Conte o que sua empresa precisa. Vamos entender seu objetivo e
             conversar sobre a melhor solução.
           </p>
           <a
-            className="button button--primary contact-section__whatsapp"
+            className="contact-primary"
             href={whatsappContactUrl}
             target="_blank"
             rel="noreferrer"
             aria-label="Falar com a NEXORA pelo WhatsApp"
           >
-            Falar com a NEXORA
-            <ArrowUpRight size={17} aria-hidden="true" />
+            <span>
+              <MessageCircle size={20} aria-hidden="true" />
+              Falar com a NEXORA
+            </span>
+            <i aria-hidden="true">
+              <ArrowUpRight size={24} />
+            </i>
           </a>
-          <div className="contact-section__signal" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
         </div>
 
-        <form
-          className="contact-form contact-reveal"
-          style={{ "--contact-delay": "120ms" } as CSSProperties}
-          onSubmit={handleFormSubmit}
-        >
-          <div className="contact-form__heading">
+        <form className="contact-form" onSubmit={handleFormSubmit}>
+          <div className="contact-form__header">
             <div>
-              <p>ENVIE UMA MENSAGEM</p>
+              <p>NOVA MENSAGEM</p>
               <h3>Conte sobre o seu projeto.</h3>
             </div>
             <span aria-hidden="true">
-              <Send size={20} strokeWidth={1.7} />
+              <Send size={21} strokeWidth={1.5} />
             </span>
           </div>
 
           <div className="contact-form__grid">
             <label>
-              <span>Nome</span>
+              <span>01 / Nome</span>
               <input
                 type="text"
                 name="name"
@@ -654,7 +774,7 @@ function ContactSection() {
               />
             </label>
             <label>
-              <span>Empresa</span>
+              <span>02 / Empresa</span>
               <input
                 type="text"
                 name="company"
@@ -664,7 +784,7 @@ function ContactSection() {
               />
             </label>
             <label>
-              <span>WhatsApp</span>
+              <span>03 / WhatsApp</span>
               <input
                 type="tel"
                 name="whatsapp"
@@ -674,7 +794,7 @@ function ContactSection() {
               />
             </label>
             <label>
-              <span>Serviço de interesse</span>
+              <span>04 / Serviço de interesse</span>
               <select name="service" defaultValue="" required>
                 <option value="" disabled>
                   Selecione um serviço
@@ -687,7 +807,7 @@ function ContactSection() {
               </select>
             </label>
             <label className="contact-form__message">
-              <span>Mensagem</span>
+              <span>05 / Mensagem</span>
               <textarea
                 name="message"
                 rows={5}
@@ -697,9 +817,11 @@ function ContactSection() {
             </label>
           </div>
 
-          <button className="button button--primary contact-form__submit" type="submit">
-            Enviar mensagem
-            <Send size={17} aria-hidden="true" />
+          <button className="contact-form__submit" type="submit">
+            <span>Enviar mensagem</span>
+            <i aria-hidden="true">
+              <Send size={18} />
+            </i>
           </button>
         </form>
       </div>
@@ -708,30 +830,7 @@ function ContactSection() {
 }
 
 function SiteFooter() {
-  const footerRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const footer = footerRef.current;
-    if (!footer) return;
-
-    if (!("IntersectionObserver" in window)) {
-      footer.classList.add("site-footer--visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        footer.classList.add("site-footer--visible");
-        observer.disconnect();
-      },
-      { threshold: 0.08 },
-    );
-
-    observer.observe(footer);
-    return () => observer.disconnect();
-  }, []);
-
+  const footerRef = useSectionReveal<HTMLElement>();
   const companyDetails = [
     nexoraCompanyDetails.cnpj && {
       label: "CNPJ",
@@ -749,13 +848,12 @@ function SiteFooter() {
   ].filter(Boolean) as Array<{ label: string; value: string; href?: string }>;
 
   return (
-    <footer className="site-footer" ref={footerRef}>
-      <div className="site-footer__inner">
-        <div
-          className={`site-footer__main footer-reveal${
-            companyDetails.length > 0 ? " site-footer__main--with-details" : ""
-          }`}
-        >
+    <footer className="site-footer reveal-section" ref={footerRef}>
+      <div className="site-footer__signal" aria-hidden="true">
+        NEXORA
+      </div>
+      <div className="section-shell site-footer__inner">
+        <div className="site-footer__main">
           <div className="site-footer__brand">
             <a href="#inicio" aria-label="Voltar ao início">
               <NexoraLogo />
@@ -800,7 +898,7 @@ function SiteFooter() {
           </div>
 
           {companyDetails.length > 0 && (
-            <div className="site-footer__company-details">
+            <div className="site-footer__details">
               <p>INFORMAÇÕES</p>
               {companyDetails.map((detail) => (
                 <div key={detail.label}>
@@ -816,9 +914,13 @@ function SiteFooter() {
           )}
         </div>
 
-        <div className="site-footer__bottom footer-reveal">
+        <div className="site-footer__bottom">
           <p>© {new Date().getFullYear()} NEXORA. Todos os direitos reservados.</p>
           <span>INTELIGÊNCIA / CRIATIVIDADE / RESULTADO</span>
+          <a href="#inicio">
+            VOLTAR AO TOPO
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </a>
         </div>
       </div>
     </footer>
@@ -829,57 +931,7 @@ function Index() {
   return (
     <main className="nexora-page">
       <SiteHeader />
-
-      <section className="hero" id="inicio" aria-labelledby="hero-title">
-        <div className="hero__inner">
-          <div className="hero__copy">
-            <p className="hero__eyebrow">
-              <span aria-hidden="true" />
-              Serviços digitais para empresas
-            </p>
-
-            <h1 id="hero-title">
-              Inteligência que faz empresas <em>crescerem.</em>
-            </h1>
-
-            <p className="hero__subtitle">
-              Criamos soluções digitais para empresas que querem melhorar sua
-              presença, sua comunicação e sua forma de vender.
-            </p>
-
-            <div className="hero__actions">
-              <a className="button button--primary" href="#servicos">
-                Conhecer nossos serviços
-              </a>
-              <a className="button button--secondary" href="#contato">
-                Falar com a NEXORA
-              </a>
-            </div>
-
-            <p className="hero__services">
-              <span>Sites</span>
-              <i aria-hidden="true">•</i>
-              <span>Landing Pages</span>
-              <i aria-hidden="true">•</i>
-              <span>Cardápios Digitais</span>
-              <i aria-hidden="true">•</i>
-              <span>Conteúdo Visual</span>
-            </p>
-          </div>
-
-          <div className="hero__visual">
-            <GrowthComposition />
-          </div>
-        </div>
-
-        <div className="hero__footer" aria-hidden="true">
-          <span>Presença</span>
-          <span>Comunicação</span>
-          <span>Inteligência</span>
-          <span>Crescimento</span>
-        </div>
-      </section>
-
+      <Hero />
       <ServicesSection />
       <WhyNexoraSection />
       <ProcessSection />
@@ -909,6 +961,18 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap",
+      },
     ],
   }),
   component: Index,
